@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Setter
 @Getter
@@ -13,5 +12,4 @@ import java.util.List;
 public class Configuracion implements Serializable {
     private String nombre;
     private Long puerto;
-    private List<String> ipBloqueadas;
 }

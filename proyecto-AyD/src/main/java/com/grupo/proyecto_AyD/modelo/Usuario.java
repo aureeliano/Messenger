@@ -6,21 +6,29 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class Usuario {
+    private static Usuario usuario;
     private String nombre;
-    private Long puerto;
+    private int puerto;
     private String ip;
     private EstadoUsuario estado;
-    private List<String> ipBloqueadas;
+    private String id;
 
-    public Usuario(String nombre, Long puerto) {
+    private Usuario(String nombre, int puerto) {
         this.nombre = nombre;
         this.puerto = puerto;
         this.ip = null;
         this.estado = EstadoUsuario.INACTIVO;
-        this.ipBloqueadas = new ArrayList<>();
+    }
+
+    public static Usuario getUsuario() {
+        if (usuario == null) {
+            usuario = new Usuario(UUID.randomUUID().toString(), 8080);
+        }
+        return usuario;
     }
 }
