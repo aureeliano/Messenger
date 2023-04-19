@@ -1,5 +1,7 @@
 package com.grupo.proyecto_AyD.vistas;
 
+import lombok.Setter;
+
 import java.awt.EventQueue;
 
 import javax.swing.*;
@@ -19,7 +21,9 @@ public class MainMenu extends JFrame implements InterfazBase {
 	private JButton btnIniciarEscucha;
 	private JButton btnConfigurarPuerto;
 	private JTextPane txtpnMenuPrincipal;
-	private JButton btnSalir; 
+	private JButton btnSalir;
+	@Setter
+	private ActionListener actionListener;
 	
 	/**
 	 * Launch the application.

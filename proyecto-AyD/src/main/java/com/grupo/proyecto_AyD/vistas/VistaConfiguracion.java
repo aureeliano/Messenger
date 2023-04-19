@@ -1,11 +1,14 @@
 package com.grupo.proyecto_AyD.vistas;
 
+import lombok.Setter;
+
 import java.awt.EventQueue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
 
 public class VistaConfiguracion extends JFrame implements InterfazConfiguracion {
 
@@ -15,6 +18,8 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 	private JTextPane txtpnIngreseUnPuerto;
 	private JTextPane txtNombre;
 	private JTextField textFieldNombre;
+	@Setter
+	private ActionListener actionListener;
 
 	/**
 	 * Launch the application.

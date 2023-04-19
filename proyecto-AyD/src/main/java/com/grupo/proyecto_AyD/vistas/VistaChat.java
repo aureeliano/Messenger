@@ -1,5 +1,8 @@
 package com.grupo.proyecto_AyD.vistas;
 
+import com.grupo.proyecto_AyD.modelo.Mensaje;
+import lombok.Setter;
+
 import java.awt.EventQueue;
 
 import javax.swing.*;
@@ -15,8 +18,10 @@ public class VistaChat extends JFrame implements InterfazChat {
 	private JTextField textFieldIP;
 	private JButton btnEnviar;
 	private JTextField textFieldMensaje;
-	private JTextPane txtpnChateandoConIp ;
-	private JList listMensajes ;
+	private JTextPane txtpnChateandoConIp;
+	private JList<Mensaje> listMensajes;
+	@Setter
+	private ActionListener actionListener;
 	/**
 	 * Launch the application.
 	 */

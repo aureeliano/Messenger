@@ -1,5 +1,7 @@
 package com.grupo.proyecto_AyD.vistas;
 
+import lombok.Setter;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -8,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
 public class VistaEscuchando extends JFrame {
@@ -15,6 +18,8 @@ public class VistaEscuchando extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldIP;
 	private String ipEscuchando;
+	@Setter
+	private ActionListener actionListener;
 
 	/**
 	 * Launch the application.
