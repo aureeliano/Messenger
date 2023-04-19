@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import java.awt.Font;
 
-public class VistaChat extends JFrame implements InterfazBase {
+public class VistaChat extends JFrame implements InterfazChat {
 
 	private JPanel contentPane;
 	private JTextField textFieldIP;
@@ -93,5 +93,10 @@ public class VistaChat extends JFrame implements InterfazBase {
 	@Override
 	public void mostrar() {
 		this.setVisible(true);
+	}
+
+	@Override
+	public String getMensaje() {
+		return textFieldMensaje.getText();
 	}
 }
