@@ -1,21 +1,15 @@
 package com.grupo.proyecto_AyD.vistas;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import java.awt.SystemColor;
-import javax.swing.JTextPane;
 import java.awt.Font;
-import javax.swing.JList;
 
-public class vistaChat extends JFrame {
+public class VistaChat extends JFrame implements InterfazBase {
 
 	private JPanel contentPane;
 	private JTextField textFieldIP;
@@ -30,7 +24,7 @@ public class vistaChat extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vistaChat frame = new vistaChat();
+					VistaChat frame = new VistaChat();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,7 +36,7 @@ public class vistaChat extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public vistaChat() {
+	public VistaChat() {
 		setTitle("Chat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -84,5 +78,20 @@ public class vistaChat extends JFrame {
 		listMensajes = new JList();
 		listMensajes.setBounds(0, 27, 434, 210);
 		contentPane.add(listMensajes);
+	}
+
+	@Override
+	public void mostrarMensaje(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
+	}
+
+	@Override
+	public void esconder() {
+		this.setVisible(false);
+	}
+
+	@Override
+	public void mostrar() {
+		this.setVisible(true);
 	}
 }

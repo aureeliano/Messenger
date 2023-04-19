@@ -14,6 +14,7 @@ public class VistaEscuchando extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldIP;
+	private String ipEscuchando;
 
 	/**
 	 * Launch the application.

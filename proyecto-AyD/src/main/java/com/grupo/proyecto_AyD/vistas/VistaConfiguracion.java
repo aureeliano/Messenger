@@ -1,23 +1,20 @@
 package com.grupo.proyecto_AyD.vistas;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.JTextPane;
 import java.awt.SystemColor;
 
-public class VistaIniciarEscucha extends JFrame {
+public class VistaConfiguracion extends JFrame implements InterfazConfiguracion {
 
 	private JPanel contentPane;
 	private JTextField textFieldPuerto;
 	private JButton btnAceptar;
 	private JTextPane txtpnIngreseUnPuerto;
+	private JTextPane txtNombre;
+	private JTextField textFieldNombre;
 
 	/**
 	 * Launch the application.
@@ -26,7 +23,7 @@ public class VistaIniciarEscucha extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VistaIniciarEscucha frame = new VistaIniciarEscucha();
+					VistaConfiguracion frame = new VistaConfiguracion();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,10 +35,10 @@ public class VistaIniciarEscucha extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VistaIniciarEscucha() {
-		setTitle("Iniciar Escucha");
+	public VistaConfiguracion() {
+		setTitle("Configuracion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 459, 186);
+		setBounds(100, 100, 466, 272);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -55,15 +52,51 @@ public class VistaIniciarEscucha extends JFrame {
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setActionCommand("aceptar");
 		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAceptar.setBounds(161, 97, 136, 29);
+		btnAceptar.setBounds(161, 187, 136, 29);
 		contentPane.add(btnAceptar);
 		
 		txtpnIngreseUnPuerto = new JTextPane();
 		txtpnIngreseUnPuerto.setBackground(SystemColor.control);
 		txtpnIngreseUnPuerto.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtpnIngreseUnPuerto.setText("Ingrese un puerto para escuchar");
-		txtpnIngreseUnPuerto.setBounds(111, 11, 222, 29);
+		txtpnIngreseUnPuerto.setText("Ingrese un puerto para escuchar. EJ: 8080");
+		txtpnIngreseUnPuerto.setBounds(36, 22, 297, 29);
 		contentPane.add(txtpnIngreseUnPuerto);
+		
+		txtNombre = new JTextPane();
+		txtNombre.setText("Ingrese un nickname");
+		txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtNombre.setBackground(SystemColor.menu);
+		txtNombre.setBounds(36, 91, 297, 29);
+		contentPane.add(txtNombre);
+		
+		textFieldNombre = new JTextField();
+		textFieldNombre.setColumns(10);
+		textFieldNombre.setBounds(36, 119, 378, 29);
+		contentPane.add(textFieldNombre);
 	}
 
+	@Override
+	public void mostrarMensaje(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
+	}
+
+	@Override
+	public void esconder() {
+		this.setVisible(false);
+	}
+
+	@Override
+	public void mostrar() {
+		this.setVisible(true);
+	}
+
+	@Override
+	public String getNombre() {
+		return textFieldNombre.getText();
+	}
+
+	@Override
+	public Integer getPuerto() {
+		return Integer.valueOf(textFieldPuerto.getText());
+	}
 }

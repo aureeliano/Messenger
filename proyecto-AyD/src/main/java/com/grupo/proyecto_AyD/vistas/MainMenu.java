@@ -2,23 +2,18 @@ package com.grupo.proyecto_AyD.vistas;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextPane;
 import java.awt.Font;
 import java.awt.Color;
-import javax.swing.UIManager;
 import java.awt.SystemColor;
 import java.awt.Cursor;
 
-public class MainMenu {
+public class MainMenu extends JFrame implements InterfazBase {
 
-	private JFrame frmMenuPrincipal;
 	private JPanel panel;
 	private JButton btnIniciarConversacion; 
 	private JButton btnIniciarEscucha;
@@ -34,7 +29,7 @@ public class MainMenu {
 			public void run() {
 				try {
 					MainMenu window = new MainMenu();
-					window.frmMenuPrincipal.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,15 +48,15 @@ public class MainMenu {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmMenuPrincipal = new JFrame();
-		frmMenuPrincipal.setTitle("Menu Principal");
-		frmMenuPrincipal.setBounds(100, 100, 458, 478);
-		frmMenuPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.setTitle("Menu Principal");
+		this.setBounds(100, 100, 458, 478);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		panel = new JPanel();
 		panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		panel.setBackground(SystemColor.window);
-		frmMenuPrincipal.getContentPane().add(panel, BorderLayout.CENTER);
+		this.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
 		btnIniciarConversacion = new JButton("Iniciar Conversacion");
@@ -87,8 +82,8 @@ public class MainMenu {
 		btnIniciarEscucha.setBounds(27, 161, 388, 54);
 		panel.add(btnIniciarEscucha);
 		
-		btnConfigurarPuerto = new JButton("Configurar Puerto");
-		btnConfigurarPuerto.setActionCommand("configurarPuerto");
+		btnConfigurarPuerto = new JButton("Configurar");
+		btnConfigurarPuerto.setActionCommand("configurar");
 		btnConfigurarPuerto.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnConfigurarPuerto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -101,7 +96,7 @@ public class MainMenu {
 		txtpnMenuPrincipal.setBackground(SystemColor.window);
 		txtpnMenuPrincipal.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnMenuPrincipal.setText("Menu Principal");
-		txtpnMenuPrincipal.setBounds(152, 11, 121, 28);
+		txtpnMenuPrincipal.setBounds(157, 10, 125, 28);
 		panel.add(txtpnMenuPrincipal);
 		
 		btnSalir = new JButton("Salir");
@@ -113,5 +108,20 @@ public class MainMenu {
 		});
 		btnSalir.setBounds(27, 346, 388, 54);
 		panel.add(btnSalir);
+	}
+
+	@Override
+	public void mostrarMensaje(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
+	}
+
+	@Override
+	public void esconder() {
+		this.setVisible(false);
+	}
+
+	@Override
+	public void mostrar() {
+		this.setVisible(true);
 	}
 }
