@@ -5,15 +5,12 @@ import lombok.Setter;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextPane;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import javax.swing.JTextField;
 
-public class VistaEscuchando extends JFrame {
+public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 
 	private JPanel contentPane;
 	private JTextField textFieldIP;
@@ -69,4 +66,24 @@ public class VistaEscuchando extends JFrame {
 		textFieldIP.setColumns(10);
 	}
 
+	@Override
+	public void mostrarMensaje(String mensaje) {
+		JOptionPane.showMessageDialog(this, mensaje);
+	}
+
+	@Override
+	public void esconder() {
+		this.setVisible(false);
+	}
+
+	@Override
+	public void mostrar() {
+		this.setVisible(true);
+	}
+
+	@Override
+	public void setIpEscuchando(String ip) {
+		ipEscuchando = ip;
+		textFieldIP.setText(ipEscuchando);
+	}
 }
