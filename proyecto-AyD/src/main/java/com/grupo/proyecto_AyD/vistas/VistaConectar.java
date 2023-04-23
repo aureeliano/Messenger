@@ -22,7 +22,7 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 			public void run() {
 				try {
 					VistaConectar window = new VistaConectar();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
