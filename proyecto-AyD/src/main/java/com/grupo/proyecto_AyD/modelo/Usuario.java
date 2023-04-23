@@ -33,12 +33,27 @@ public class Usuario {
         return usuario;
     }
 
-    public void iniciarEscucha() {
-        this.estado = EstadoUsuario.ESCUCHANDO;
+    private void updateIp() {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (Exception e) {
             System.out.println("Error al obtener la ip: " + e.getMessage());
         }
+    }
+
+    public void iniciarEscucha() {
+        this.estado = EstadoUsuario.ESCUCHANDO;
+        updateIp();
+    }
+
+    public void iniciarConexion() {
+        this.estado = EstadoUsuario.CONECTADO;
+        updateIp();
+    }
+
+    public void actualizarInformacion(String nombre, int puerto) {
+        this.nombre = nombre;
+        this.puerto = puerto;
+        updateIp();
     }
 }

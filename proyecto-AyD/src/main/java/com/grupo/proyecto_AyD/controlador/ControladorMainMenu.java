@@ -32,6 +32,7 @@ public class ControladorMainMenu implements ActionListener {
 
         switch (comando) {
             case "iniciarEscucha":
+                usuario.iniciarEscucha();
                 ControladorEscuchando.getControlador();
                 vistaMenu.esconder();
                 break;
@@ -43,7 +44,9 @@ public class ControladorMainMenu implements ActionListener {
                 ControladorChat.getControlador();
                 vistaMenu.esconder();
                 break;
-
+            case "salir":
+                System.exit(0);
+                break;
         }
 
     }

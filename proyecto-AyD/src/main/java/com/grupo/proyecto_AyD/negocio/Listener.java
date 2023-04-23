@@ -1,20 +1,11 @@
 package com.grupo.proyecto_AyD.negocio;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
-import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.UUID;
 
 public class Listener extends GestionDeRed {
 

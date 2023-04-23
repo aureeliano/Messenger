@@ -13,6 +13,7 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 	private JTextField txtPuerto;
 	private JButton btnConectar;
 	private ActionListener actionListener;
+	private JButton btnVolver;
 
 	/**
 	 * Launch the application.
@@ -41,7 +42,7 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 395, 288);
+		this.setBounds(100, 100, 388, 343);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(null);
 		
@@ -72,11 +73,18 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 		txtPuerto.setColumns(10);
 		txtPuerto.setBounds(10, 147, 361, 33);
 		this.getContentPane().add(txtPuerto);
+		
+		btnVolver = new JButton("Volver");
+		btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnVolver.setActionCommand("volver");
+		btnVolver.setBounds(126, 261, 113, 40);
+		getContentPane().add(btnVolver);
 	}
 
 	public void setActionListener(ActionListener actionListener) {
 		this.actionListener = actionListener;
 		this.btnConectar.addActionListener(actionListener);
+		this.btnVolver.addActionListener(actionListener);
 	}
 
 	public void mostrarMensaje(String mensaje) {

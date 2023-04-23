@@ -1,5 +1,6 @@
 package com.grupo.proyecto_AyD;
 
+import com.grupo.proyecto_AyD.controlador.ControladorMainMenu;
 import com.grupo.proyecto_AyD.vistas.MainMenu;
 
 /**
@@ -10,6 +11,6 @@ public class App
 {
     public static void main( String[] args ) {
 
-        MainMenu mainMenu = new MainMenu();
+        ControladorMainMenu.getControlador();
     }
 }

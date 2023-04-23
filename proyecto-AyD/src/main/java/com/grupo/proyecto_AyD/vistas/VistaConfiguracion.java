@@ -15,10 +15,9 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 	private JPanel contentPane;
 	private JTextField textFieldPuerto;
 	private JButton btnAceptar;
-	private JTextPane txtpnIngreseUnPuerto;
-	private JTextPane txtNombre;
+	private JLabel txtpnIngreseUnPuerto;
+	private JLabel txtNombre;
 	private JTextField textFieldNombre;
-	@Setter
 	private ActionListener actionListener;
 
 	/**
@@ -60,14 +59,14 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 		btnAceptar.setBounds(161, 187, 136, 29);
 		contentPane.add(btnAceptar);
 		
-		txtpnIngreseUnPuerto = new JTextPane();
+		txtpnIngreseUnPuerto = new JLabel();
 		txtpnIngreseUnPuerto.setBackground(SystemColor.control);
 		txtpnIngreseUnPuerto.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnIngreseUnPuerto.setText("Ingrese un puerto para escuchar. EJ: 8080");
 		txtpnIngreseUnPuerto.setBounds(36, 22, 297, 29);
 		contentPane.add(txtpnIngreseUnPuerto);
 		
-		txtNombre = new JTextPane();
+		txtNombre = new JLabel();
 		txtNombre.setText("Ingrese un nickname");
 		txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtNombre.setBackground(SystemColor.menu);
@@ -100,8 +99,22 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 		return textFieldNombre.getText();
 	}
 
+	public void setNombre(String nombre) {
+		textFieldNombre.setText(nombre);
+	}
+
 	@Override
 	public Integer getPuerto() {
 		return Integer.valueOf(textFieldPuerto.getText());
+	}
+
+	public void setPuerto(Integer puerto) {
+		textFieldPuerto.setText(puerto.toString());
+	}
+
+	@Override
+	public void setActionListener(ActionListener actionListener) {
+		this.actionListener = actionListener;
+		btnAceptar.addActionListener(actionListener);
 	}
 }
