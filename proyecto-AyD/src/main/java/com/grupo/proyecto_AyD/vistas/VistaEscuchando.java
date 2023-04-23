@@ -9,14 +9,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 
 	private JPanel contentPane;
 	private JTextField textFieldIP;
 	private String ipEscuchando;
-	@Setter
 	private ActionListener actionListener;
+	private JButton btnVolver;
 
 	/**
 	 * Launch the application.
@@ -40,7 +41,7 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 	public VistaEscuchando() {
 		setTitle("Escuchando");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 446, 128);
+		setBounds(100, 100, 465, 180);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -50,7 +51,7 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 		txtpnEscuchando.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnEscuchando.setText("Escuchando...");
 		txtpnEscuchando.setToolTipText("");
-		txtpnEscuchando.setBounds(154, 11, 99, 25);
+		txtpnEscuchando.setBounds(168, 10, 99, 25);
 		contentPane.add(txtpnEscuchando);
 		
 		JTextPane txtpnSuIpEs = new JTextPane();
@@ -64,6 +65,11 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 		textFieldIP.setBounds(198, 42, 86, 20);
 		contentPane.add(textFieldIP);
 		textFieldIP.setColumns(10);
+		
+		btnVolver = new JButton("Volver");
+		btnVolver.setActionCommand("volver");
+		btnVolver.setBounds(182, 112, 85, 21);
+		contentPane.add(btnVolver);
 	}
 
 	@Override
@@ -85,5 +91,10 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 	public void setIpEscuchando(String ip) {
 		ipEscuchando = ip;
 		textFieldIP.setText(ipEscuchando);
+	}
+
+	public void setActionListener(ActionListener actionListener) {
+		this.actionListener = actionListener;
+		btnVolver.addActionListener(actionListener);
 	}
 }

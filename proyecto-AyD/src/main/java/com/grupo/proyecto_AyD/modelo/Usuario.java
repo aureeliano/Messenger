@@ -4,6 +4,7 @@ import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,5 +31,14 @@ public class Usuario {
             usuario = new Usuario(UUID.randomUUID().toString(), 8080);
         }
         return usuario;
+    }
+
+    public void iniciarEscucha() {
+        this.estado = EstadoUsuario.ESCUCHANDO;
+        try {
+            this.ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (Exception e) {
+            System.out.println("Error al obtener la ip: " + e.getMessage());
+        }
     }
 }

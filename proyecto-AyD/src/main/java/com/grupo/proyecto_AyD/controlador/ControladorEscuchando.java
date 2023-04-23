@@ -1,5 +1,6 @@
 package com.grupo.proyecto_AyD.controlador;
 
+import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.vistas.InterfazEscuchando;
 import com.grupo.proyecto_AyD.vistas.VistaEscuchando;
 
@@ -20,12 +21,20 @@ public class ControladorEscuchando implements ActionListener {
             controladorEscuchando = new ControladorEscuchando();
         }
 
+        controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
         controladorEscuchando.vistaEscuchando.mostrar();
         return controladorEscuchando;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
 
+        switch (comando) {
+            case "volver":
+                ControladorMainMenu.getControlador();
+                vistaEscuchando.esconder();
+                break;
+        }
     }
 }

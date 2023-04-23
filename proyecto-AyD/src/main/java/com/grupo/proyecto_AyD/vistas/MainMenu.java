@@ -1,18 +1,9 @@
 package com.grupo.proyecto_AyD.vistas;
 
-import lombok.Setter;
-
-import java.awt.EventQueue;
-
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.SystemColor;
-import java.awt.Cursor;
+import java.awt.event.ActionListener;
 
 public class MainMenu extends JFrame implements InterfazBase {
 
@@ -22,8 +13,6 @@ public class MainMenu extends JFrame implements InterfazBase {
 	private JButton btnConfigurarPuerto;
 	private JTextPane txtpnMenuPrincipal;
 	private JButton btnSalir;
-	@Setter
-	private ActionListener actionListener;
 	
 	/**
 	 * Launch the application.
@@ -127,5 +116,12 @@ public class MainMenu extends JFrame implements InterfazBase {
 	@Override
 	public void mostrar() {
 		this.setVisible(true);
+	}
+
+	public void setActionListener(ActionListener actionListener) {
+		btnIniciarConversacion.addActionListener(actionListener);
+		btnIniciarEscucha.addActionListener(actionListener);
+		btnConfigurarPuerto.addActionListener(actionListener);
+		btnSalir.addActionListener(actionListener);
 	}
 }
