@@ -11,10 +11,12 @@ import java.awt.event.ActionListener;
 public class ControladorEscuchando implements ActionListener {
     private static ControladorEscuchando controladorEscuchando = null;
     private InterfazEscuchando vistaEscuchando;
+    private Usuario usuario;
     private Listener listener;
 
     private ControladorEscuchando() {
         vistaEscuchando = new VistaEscuchando();
+        usuario = Usuario.getUsuario();
         vistaEscuchando.setActionListener(this);
     }
 
@@ -37,6 +39,7 @@ public class ControladorEscuchando implements ActionListener {
 
         switch (comando) {
             case "volver":
+                usuario.finalizarEscucha();
                 ControladorMainMenu.getControlador();
                 vistaEscuchando.esconder();
                 break;

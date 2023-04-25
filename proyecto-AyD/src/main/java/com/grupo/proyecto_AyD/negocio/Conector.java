@@ -7,6 +7,11 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Conector extends GestionDeRed{
+
+    public Conector() {
+        super();
+    }
+
     public void conectar(String ip, int puerto) {
         try {
             socket = new Socket(ip, puerto);

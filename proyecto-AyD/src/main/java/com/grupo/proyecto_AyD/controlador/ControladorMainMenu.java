@@ -41,7 +41,7 @@ public class ControladorMainMenu implements ActionListener {
                 vistaMenu.esconder();
                 break;
             case "iniciarConversacion":
-                ControladorChat.getControlador();
+                ControladorConectar.getControlador();
                 vistaMenu.esconder();
                 break;
             case "salir":

@@ -9,6 +9,10 @@ import java.net.ServerSocket;
 
 public class Listener extends GestionDeRed {
 
+    public Listener() {
+        super();
+    }
+
     /**
      * Metodo que permite entrar en modo de escucha
      * @return ip del usuario que esta escuchando

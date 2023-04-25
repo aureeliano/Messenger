@@ -4,7 +4,10 @@ import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +38,9 @@ public class Usuario {
 
     private void updateIp() {
         try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
+            URL url = new URL("http://checkip.amazonaws.com/");
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            this.ip = br.readLine();
         } catch (Exception e) {
             System.out.println("Error al obtener la ip: " + e.getMessage());
         }
@@ -43,6 +48,11 @@ public class Usuario {
 
     public void iniciarEscucha() {
         this.estado = EstadoUsuario.ESCUCHANDO;
+        updateIp();
+    }
+
+    public void finalizarEscucha() {
+        this.estado = EstadoUsuario.INACTIVO;
         updateIp();
     }
 
