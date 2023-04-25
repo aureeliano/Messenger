@@ -5,32 +5,20 @@ import com.grupo.proyecto_AyD.controlador.ControladorChat;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class GestionDeRed {
     Socket socket;
     ServerSocket serverSocket;
-    DataInputStream bufferEntrada = null;
-    DataOutputStream bufferSalida = null;
+    BufferedReader bufferEntrada;
+    PrintWriter bufferSalida;
     boolean escuchando = true;
+    boolean conectado = true;
     Sesion sesionActiva;
     final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void flow() {
-        try {
-            bufferEntrada = new DataInputStream(socket.getInputStream());
-            bufferSalida = new DataOutputStream(socket.getOutputStream());
-            bufferSalida.flush();
-        } catch (Exception e) {
-            String mensaje = "Error al crear los buffers";
-            System.out.println(mensaje);
-            throw new RuntimeException(mensaje);
-        }
-    }
 
     /**
      * Metodo que permite recibir mensajes, se parsean a objetos y se agregan a la lista de mensajes
@@ -39,10 +27,14 @@ public class GestionDeRed {
         Mensaje mensaje;
 
         try {
-            mensaje = objectMapper.readValue(bufferEntrada.readUTF(), Mensaje.class);
+            mensaje = objectMapper.readValue(bufferEntrada.readLine(), Mensaje.class);
 
             if (mensaje.getMensaje().equals("INICIAR_SESION")) {
                 ControladorChat.getControlador();
+            }
+
+            if (mensaje.getMensaje().equals("CERRAR_SESION")) {
+                this.cerrarConexion();
             }
 
             this.sesionActiva.getMensajes().add(mensaje);
@@ -62,7 +54,7 @@ public class GestionDeRed {
         try {
             Mensaje mensaje = new Mensaje(contenido);
 
-            bufferSalida.writeUTF(objectMapper.writeValueAsString(mensaje));
+            bufferSalida.write(objectMapper.writeValueAsString(mensaje));
             bufferSalida.flush();
             System.out.println("Mensaje enviado: " + mensaje.getMensaje());
         } catch (Exception e) {
@@ -78,6 +70,7 @@ public class GestionDeRed {
             socket.close();
 
             this.escuchando = false;
+            this.conectado = false;
         } catch (Exception e) {
             String mensaje = "Error al cerrar la conexion";
             System.out.println(mensaje);

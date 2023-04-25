@@ -5,12 +5,15 @@ import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 
 public class Listener extends GestionDeRed {
 
-    public Listener() {
+    public Listener() throws IOException {
         super();
     }
 
@@ -28,6 +31,9 @@ public class Listener extends GestionDeRed {
             this.sesionActiva.getUsuarios().add(UsuarioDTO.fromUsuario(usuario));
 
             socket = serverSocket.accept();
+
+            bufferEntrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bufferSalida = new PrintWriter(socket.getOutputStream(), true);
         } catch (Exception e) {
             String mensaje = "Error al levantando listener";
             System.out.println(mensaje);
@@ -46,10 +52,9 @@ public class Listener extends GestionDeRed {
      */
     public void ejecutarEscucha() {
         Thread thread = new Thread(() -> {
+            escuchar();
             while (escuchando) {
                 try {
-                    escuchar();
-                    flow();
                     recibirMensajes();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
