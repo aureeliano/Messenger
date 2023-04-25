@@ -1,10 +1,7 @@
 package com.grupo.proyecto_AyD.negocio;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.ServerSocket;
+import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Conector extends GestionDeRed{
 
@@ -29,13 +26,17 @@ public class Conector extends GestionDeRed{
             try {
                 conectar(ip, puerto);
                 flow();
-                recibirMensajes();
+                this.enviarMensaje("INICIAR_SESION");
+                try {
+                    recibirMensajes();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } finally {
                 cerrarConexion();
             }
         });
 
         thread.start();
-        this.enviarMensaje("INICIAR_SESION");
     }
 }

@@ -5,6 +5,7 @@ import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Listener extends GestionDeRed {
@@ -55,6 +56,8 @@ public class Listener extends GestionDeRed {
                     escuchar();
                     flow();
                     recibirMensajes();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 } finally {
                     cerrarConexion();
                 }

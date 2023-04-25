@@ -7,6 +7,7 @@ import com.grupo.proyecto_AyD.modelo.Sesion;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -34,7 +35,7 @@ public class GestionDeRed {
     /**
      * Metodo que permite recibir mensajes, se parsean a objetos y se agregan a la lista de mensajes
      */
-    public void recibirMensajes() {
+    public void recibirMensajes() throws IOException {
         Mensaje mensaje;
 
         try {
@@ -49,7 +50,7 @@ public class GestionDeRed {
             System.out.println("Mensaje recibido: " + mensaje.getMensaje());
         } catch (Exception e) {
             System.out.println("Error al recibir mensaje");
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 
@@ -63,6 +64,7 @@ public class GestionDeRed {
 
             bufferSalida.writeUTF(objectMapper.writeValueAsString(mensaje));
             bufferSalida.flush();
+            System.out.println("Mensaje enviado: " + mensaje.getMensaje());
         } catch (Exception e) {
             System.out.println("Error al enviar mensaje");
             throw new RuntimeException(e);
