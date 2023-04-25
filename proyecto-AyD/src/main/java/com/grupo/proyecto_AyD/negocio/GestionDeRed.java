@@ -16,7 +16,7 @@ public class GestionDeRed {
     ServerSocket serverSocket;
     DataInputStream bufferEntrada = null;
     DataOutputStream bufferSalida = null;
-    boolean escuchando = false;
+    boolean escuchando = true;
     Sesion sesionActiva;
     final ObjectMapper objectMapper = new ObjectMapper();
 

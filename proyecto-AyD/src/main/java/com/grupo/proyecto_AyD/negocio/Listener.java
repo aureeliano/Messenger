@@ -18,9 +18,8 @@ public class Listener extends GestionDeRed {
      * Metodo que permite entrar en modo de escucha
      * @return ip del usuario que esta escuchando
      */
-    public String escuchar() {
+    public void escuchar() {
         Usuario usuario = Usuario.getUsuario();
-        usuario.setEstado(EstadoUsuario.ESCUCHANDO);
         try {
             serverSocket = new ServerSocket(usuario.getPuerto());
             System.out.println("Escuchando en el puerto " + usuario.getPuerto());
@@ -32,7 +31,6 @@ public class Listener extends GestionDeRed {
             this.sesionActiva = new Sesion();
             this.sesionActiva.getUsuarios().add(UsuarioDTO.fromUsuario(usuario));
 
-            return socket.getInetAddress().getHostAddress();
         } catch (Exception e) {
             String mensaje = "Error al levantando listener";
             System.out.println(mensaje);
