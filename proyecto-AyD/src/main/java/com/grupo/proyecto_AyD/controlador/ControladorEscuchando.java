@@ -7,6 +7,7 @@ import com.grupo.proyecto_AyD.vistas.VistaEscuchando;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class ControladorEscuchando implements ActionListener {
     private static ControladorEscuchando controladorEscuchando = null;
@@ -26,9 +27,8 @@ public class ControladorEscuchando implements ActionListener {
         }
 
         controladorEscuchando.listener = new Listener();
-        controladorEscuchando.listener.ejecutarEscucha();
 
-        controladorEscuchando.usuario.iniciarEscucha(controladorEscuchando.listener);
+        controladorEscuchando.listener.init("", controladorEscuchando.usuario.getPuerto());
 
         controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
         controladorEscuchando.vistaEscuchando.mostrar();

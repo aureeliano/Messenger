@@ -1,7 +1,6 @@
 package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
-import com.grupo.proyecto_AyD.negocio.GestionDeRed;
 import com.grupo.proyecto_AyD.vistas.InterfazChat;
 import com.grupo.proyecto_AyD.vistas.VistaChat;
 

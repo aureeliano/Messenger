@@ -1,5 +1,7 @@
 package com.grupo.proyecto_AyD.negocio;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo.proyecto_AyD.controlador.ControladorChat;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -10,60 +12,57 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.net.Socket;
 
-public class Listener extends GestionDeRed {
+public class Listener implements ChatInterface {
+    private ServerSocket serverSocket;
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
+    private boolean eschuchando = false;
 
-    public Listener() throws IOException {
-        super();
-    }
+    private ObjectMapper mapper;
 
-    /**
-     * Metodo que permite entrar en modo de escucha
-     * @return ip del usuario que esta escuchando
-     */
-    public void escuchar() {
-        Usuario usuario = Usuario.getUsuario();
+
+    public void init(String ip, int puerto) {
         try {
-            serverSocket = new ServerSocket(usuario.getPuerto());
-            System.out.println("Escuchando en el puerto " + usuario.getPuerto());
+            serverSocket = new ServerSocket(puerto);
+            this.eschuchando = true;
+            mapper = new ObjectMapper();
 
-            this.sesionActiva = new Sesion();
-            this.sesionActiva.getUsuarios().add(UsuarioDTO.fromUsuario(usuario));
-
-            socket = serverSocket.accept();
-
-            bufferEntrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            bufferSalida = new PrintWriter(socket.getOutputStream(), true);
-        } catch (Exception e) {
-            String mensaje = "Error al levantando listener";
-            System.out.println(mensaje);
-            usuario.setEstado(EstadoUsuario.INACTIVO);
-
-            throw new RuntimeException(mensaje);
+            escuchar();
+        } catch (IOException e) {
+            System.out.println("Error al iniciar el listener: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
+    @Override
+    public void enviarMensaje(String mensaje) {
 
+    }
 
-    /**
-     * Este metodo permite ejecutar la escucha en un hilo aparte
-     * para que no se bloquee el hilo principal
-     * Llamar desde el controlador
-     */
-    public void ejecutarEscucha() {
+    private void escuchar() {
         Thread thread = new Thread(() -> {
-            escuchar();
-            while (escuchando) {
-                try {
-                    recibirMensajes();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    cerrarConexion();
+            try {
+                while (eschuchando) {
+                    Socket soc = serverSocket.accept();
+                    out = new PrintWriter(soc.getOutputStream(), true);
+                    in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+
+                    if (in.readLine().contains("INICIAR_CHAT")) {
+                        ControladorChat.getControlador();
+                    }
                 }
+            } catch (Exception e){
+                System.out.println(e.getMessage());
             }
         });
 
         thread.start();
+    }
+
+    public void pararEscucha() {
+        this.eschuchando = false;
     }
 }

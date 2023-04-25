@@ -1,16 +1,13 @@
 package com.grupo.proyecto_AyD.modelo;
 
-import com.grupo.proyecto_AyD.negocio.GestionDeRed;
+import com.grupo.proyecto_AyD.negocio.ChatInterface;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -22,8 +19,8 @@ public class Usuario {
     private String ip;
     private EstadoUsuario estado;
     private String id;
+    private ChatInterface interfazActiva;
 
-    private GestionDeRed interfazActiva;
 
     private Usuario(String nombre, int puerto) {
         this.nombre = nombre;
@@ -49,9 +46,9 @@ public class Usuario {
         }
     }
 
-    public void iniciarEscucha(GestionDeRed interfazActiva) {
+    public void iniciarEscucha(ChatInterface chat) {
         this.estado = EstadoUsuario.ESCUCHANDO;
-        this.interfazActiva = interfazActiva;
+        this.interfazActiva = chat;
         updateIp();
     }
 
@@ -60,9 +57,9 @@ public class Usuario {
         updateIp();
     }
 
-    public void iniciarConexion(GestionDeRed interfazActiva) {
+    public void iniciarConexion(ChatInterface chat) {
         this.estado = EstadoUsuario.CONECTADO;
-        this.interfazActiva = interfazActiva;
+        this.interfazActiva = chat;
         updateIp();
     }
 
@@ -72,7 +69,4 @@ public class Usuario {
         updateIp();
     }
 
-    public GestionDeRed getInterfazActiva() {
-        return interfazActiva;
-    }
 }
