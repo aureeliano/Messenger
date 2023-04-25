@@ -12,8 +12,8 @@ public class Conector extends GestionDeRed {
 
     private void conectar(String ip, int puerto) {
         try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, puerto), 1000);
+            System.out.println("Intentando conectar a: " + ip + ":" + puerto);
+            socket = new Socket(ip, puerto);
             System.out.println("Conectado a: " + ip + ":" + puerto);
         } catch (Exception e) {
             String mensaje = "Error conectando a: " + ip + ":" + puerto;

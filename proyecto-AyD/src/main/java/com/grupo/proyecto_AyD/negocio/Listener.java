@@ -24,13 +24,10 @@ public class Listener extends GestionDeRed {
             serverSocket = new ServerSocket(usuario.getPuerto());
             System.out.println("Escuchando en el puerto " + usuario.getPuerto());
 
-            socket = serverSocket.accept();
-            this.escuchando = true;
-            System.out.println("Escuchando en ip " + socket.getInetAddress().getHostAddress());
-
             this.sesionActiva = new Sesion();
             this.sesionActiva.getUsuarios().add(UsuarioDTO.fromUsuario(usuario));
 
+            socket = serverSocket.accept();
         } catch (Exception e) {
             String mensaje = "Error al levantando listener";
             System.out.println(mensaje);
