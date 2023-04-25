@@ -1,5 +1,7 @@
 package com.grupo.proyecto_AyD.controlador;
 
+import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.negocio.GestionDeRed;
 import com.grupo.proyecto_AyD.vistas.InterfazChat;
 import com.grupo.proyecto_AyD.vistas.VistaChat;
 
@@ -10,9 +12,12 @@ public class ControladorChat implements ActionListener {
     private static ControladorChat controladorChat = null;
     private InterfazChat vistaChat;
 
+    private Usuario usuario;
+
     private ControladorChat() {
         vistaChat = new VistaChat();
         vistaChat.setActionListener(this);
+        usuario = Usuario.getUsuario();
     }
 
     public static ControladorChat getControlador() {
@@ -27,6 +32,17 @@ public class ControladorChat implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
 
+        switch (comando) {
+            case "enviar":
+                if (vistaChat.getMensaje().equals("")) {
+                    break;
+                }
+                usuario.getInterfazActiva().enviarMensaje(vistaChat.getMensaje());
+                ControladorMainMenu.getControlador();
+                vistaChat.esconder();
+                break;
+        }
     }
 }

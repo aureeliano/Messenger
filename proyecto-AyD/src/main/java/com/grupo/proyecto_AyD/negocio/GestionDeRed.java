@@ -1,6 +1,7 @@
 package com.grupo.proyecto_AyD.negocio;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo.proyecto_AyD.controlador.ControladorChat;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 
@@ -38,6 +39,11 @@ public class GestionDeRed {
 
         try {
             mensaje = objectMapper.readValue(bufferEntrada.readUTF(), Mensaje.class);
+
+            if (mensaje.getMensaje().equals("INICIAR_SESION")) {
+                ControladorChat.getControlador();
+            }
+
             this.sesionActiva.getMensajes().add(mensaje);
 
             System.out.println("Mensaje recibido: " + mensaje.getMensaje());

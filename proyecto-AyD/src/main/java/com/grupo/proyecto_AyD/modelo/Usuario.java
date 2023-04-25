@@ -1,5 +1,6 @@
 package com.grupo.proyecto_AyD.modelo;
 
+import com.grupo.proyecto_AyD.negocio.GestionDeRed;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class Usuario {
     private String ip;
     private EstadoUsuario estado;
     private String id;
+
+    private GestionDeRed interfazActiva;
 
     private Usuario(String nombre, int puerto) {
         this.nombre = nombre;
@@ -46,8 +49,9 @@ public class Usuario {
         }
     }
 
-    public void iniciarEscucha() {
+    public void iniciarEscucha(GestionDeRed interfazActiva) {
         this.estado = EstadoUsuario.ESCUCHANDO;
+        this.interfazActiva = interfazActiva;
         updateIp();
     }
 
@@ -56,8 +60,9 @@ public class Usuario {
         updateIp();
     }
 
-    public void iniciarConexion() {
+    public void iniciarConexion(GestionDeRed interfazActiva) {
         this.estado = EstadoUsuario.CONECTADO;
+        this.interfazActiva = interfazActiva;
         updateIp();
     }
 
@@ -65,5 +70,9 @@ public class Usuario {
         this.nombre = nombre;
         this.puerto = puerto;
         updateIp();
+    }
+
+    public GestionDeRed getInterfazActiva() {
+        return interfazActiva;
     }
 }

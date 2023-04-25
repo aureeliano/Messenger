@@ -45,10 +45,10 @@ public class ControladorConectar implements ActionListener {
                 vistaConectar.esconder();
                 break;
             case "conectar":
-                usuario.iniciarEscucha();
-                conector.conectar(vistaConectar.getIp(), Integer.getInteger(vistaConectar.getPuerto()));
-                ControladorEscuchando.getControlador();
+                usuario.iniciarConexion(this.conector);
+                ControladorChat.getControlador();
                 vistaConectar.esconder();
+                conector.ejecutarConexion(vistaConectar.getIp(), Integer.parseInt(vistaConectar.getPuerto()));
                 break;
         }
     }

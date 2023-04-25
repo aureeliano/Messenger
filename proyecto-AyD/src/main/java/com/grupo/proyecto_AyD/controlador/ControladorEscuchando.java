@@ -28,6 +28,8 @@ public class ControladorEscuchando implements ActionListener {
         controladorEscuchando.listener = new Listener();
         controladorEscuchando.listener.ejecutarEscucha();
 
+        controladorEscuchando.usuario.iniciarEscucha(controladorEscuchando.listener);
+
         controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
         controladorEscuchando.vistaEscuchando.mostrar();
         return controladorEscuchando;

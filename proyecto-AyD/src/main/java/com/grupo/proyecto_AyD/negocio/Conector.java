@@ -12,7 +12,7 @@ public class Conector extends GestionDeRed{
         super();
     }
 
-    public void conectar(String ip, int puerto) {
+    private void conectar(String ip, int puerto) {
         try {
             socket = new Socket(ip, puerto);
             System.out.println("Conectado a: " + ip + ":" + puerto);
@@ -25,19 +25,17 @@ public class Conector extends GestionDeRed{
     }
 
     public void ejecutarConexion(String ip, int puerto) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    conectar(ip, puerto);
-                    flow();
-                    recibirMensajes();
-                } finally {
-                    cerrarConexion();
-                }
+        Thread thread = new Thread(() -> {
+            try {
+                conectar(ip, puerto);
+                flow();
+                recibirMensajes();
+            } finally {
+                cerrarConexion();
             }
         });
 
         thread.start();
+        this.enviarMensaje("INICIAR_SESION");
     }
 }

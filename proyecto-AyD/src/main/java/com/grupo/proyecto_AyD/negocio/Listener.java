@@ -49,17 +49,14 @@ public class Listener extends GestionDeRed {
      * Llamar desde el controlador
      */
     public void ejecutarEscucha() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (escuchando) {
-                    try {
-                        escuchar();
-                        flow();
-                        recibirMensajes();
-                    } finally {
-                        cerrarConexion();
-                    }
+        Thread thread = new Thread(() -> {
+            while (escuchando) {
+                try {
+                    escuchar();
+                    flow();
+                    recibirMensajes();
+                } finally {
+                    cerrarConexion();
                 }
             }
         });

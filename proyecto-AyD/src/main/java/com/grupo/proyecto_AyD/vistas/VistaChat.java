@@ -18,7 +18,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 	private JTextField textFieldIP;
 	private JButton btnEnviar;
 	private JTextField textFieldMensaje;
-	private JTextPane txtpnChateandoConIp;
+	private JLabel txtpnChateandoConIp;
 	private JList<Mensaje> listMensajes;
 	@Setter
 	private ActionListener actionListener;
@@ -69,7 +69,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 		contentPane.add(textFieldMensaje);
 		textFieldMensaje.setColumns(10);
 		
-		txtpnChateandoConIp = new JTextPane();
+		txtpnChateandoConIp = new JLabel();
 		txtpnChateandoConIp.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnChateandoConIp.setText("Chateando con IP: ");
 		txtpnChateandoConIp.setBounds(84, 0, 134, 26);
@@ -102,6 +102,14 @@ public class VistaChat extends JFrame implements InterfazChat {
 
 	@Override
 	public String getMensaje() {
-		return textFieldMensaje.getText();
+		String mensaje = textFieldMensaje.getText();
+		textFieldMensaje.setText("");
+
+		return mensaje;
+	}
+
+	@Override
+	public void setIpCompañero(String ip) {
+		textFieldIP.setText(ip);
 	}
 }
