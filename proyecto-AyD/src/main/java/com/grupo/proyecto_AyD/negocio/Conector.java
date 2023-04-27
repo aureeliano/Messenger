@@ -28,18 +28,19 @@ public class Conector implements ChatInterface  {
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             usuario.setIp(br.readLine());
 
+            System.out.println("Intentando conectar a: " + ip + ":" + puerto);
             socket = new Socket(ip, puerto);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+            mapper = new ObjectMapper();
+
+
             enviarMensaje(("[CONTROL][INICIAR_CHAT]"));
             enviarMensaje("[CONTROL]IP:" + usuario.getIp());
             enviarMensaje("[CONTROL]PUERTO:" + usuario.getPuerto());
-
-            mapper = new ObjectMapper();
         } catch (IOException e) {
             System.out.println("Error al iniciar el conector: " + e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 
