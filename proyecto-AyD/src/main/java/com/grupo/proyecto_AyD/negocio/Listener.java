@@ -53,6 +53,10 @@ public class Listener implements ChatInterface {
 
     }
 
+    public void conectar() {
+
+    }
+
     private void escuchar() {
         Thread thread = new Thread(() -> {
             try {
@@ -61,25 +65,30 @@ public class Listener implements ChatInterface {
                     Socket soc = serverSocket.accept();
                     in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 
-                    Mensaje mensaje = mapper.readValue(in.readLine(), Mensaje.class);
+                    String mensajeCrudo = in.readLine();
+                    System.out.println("MENSAJE RECIBIDO: " + mensajeCrudo);
 
-                    System.out.println("MENSAJE RECIBIDO: " + mensaje.getMensaje());
+                    if (mensajeCrudo != null) {
+                        Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
 
-                    if (mensaje.getMensaje().contains("[CONTROL]")) {
-                        if (mensaje.getMensaje().contains("PUERTO:")) {
-                            this.puerto = in.readLine().replace("[CONTROL]PUERTO:", "");
+
+                        if (mensaje.getMensaje().contains("[CONTROL]")) {
+                            if (mensaje.getMensaje().contains("PUERTO:")) {
+                                this.puerto = mensaje.getMensaje().replace("[CONTROL]PUERTO:", "");
+                            }
+
+                            if (mensaje.getMensaje().contains("IP:")) {
+                                this.ip = mensaje.getMensaje().replace("[CONTROL]IP:", "");
+                            }
+
+                            if (puerto != null && ip != null) {
+                                ControladorChat.getControlador(ip, puerto, true);
+                            }
+                        } else {
+                            Sesion.getSesion().getMensajes().add(mensaje);
                         }
-
-                        if (in.readLine().contains("IP:")) {
-                            this.ip = in.readLine().replace("[CONTROL]IP:","");
-                        }
-
-                        if (puerto != null && ip != null) {
-                            ControladorChat.getControlador(ip, puerto, true);
-                        }
-                    } else  {
-                        Sesion.getSesion().getMensajes().add(mensaje);
                     }
+                    System.out.println("Loop");
                 }
             } catch (Exception e){
                 System.out.println(e.getMessage());
@@ -91,6 +100,11 @@ public class Listener implements ChatInterface {
 
     public void pararEscucha() {
         usuario.finalizarEscucha();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            System.out.println("Error al cerrar el socket: " + e.getMessage());
+        }
         this.eschuchando = false;
     }
 
