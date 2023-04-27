@@ -19,6 +19,8 @@ public class Conector implements ChatInterface  {
     private ObjectMapper mapper;
     private Usuario usuario;
 
+    private static Conector conector;
+
 
     public void init(String ip, int puerto) {
         this.usuario = Usuario.getUsuario();
@@ -50,9 +52,17 @@ public class Conector implements ChatInterface  {
 
         try {
             out.println(mapper.writeValueAsString(mensaje));
-            System.out.println("Mensaje enviado");
+            System.out.println("Mensaje enviado: " + contenido);
         } catch (Exception e) {
             System.out.println("Error enviando mensaje: " + e.getMessage());
         }
+    }
+
+    public static Conector getConector() {
+        if (conector == null) {
+            conector = new Conector();
+        }
+
+        return conector;
     }
 }

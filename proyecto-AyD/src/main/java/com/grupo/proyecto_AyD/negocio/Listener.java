@@ -18,12 +18,15 @@ import java.net.URL;
 public class Listener implements ChatInterface {
     private ServerSocket serverSocket;
     private Socket socket;
-    private PrintWriter out;
     private BufferedReader in;
     private boolean eschuchando = false;
 
     private ObjectMapper mapper;
     private Usuario usuario;
+    private String puerto;
+    private String ip;
+
+    private static Listener listener;
 
 
     public void init(String ip, int puerto) {
@@ -55,12 +58,19 @@ public class Listener implements ChatInterface {
             try {
                 while (eschuchando) {
                     Socket soc = serverSocket.accept();
-                    out = new PrintWriter(soc.getOutputStream(), true);
                     in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 
                     if (in.readLine().contains("[CONTROL]")) {
-                        if (in.readLine().contains("[INICIAR_CHAT]")) {
-                            ControladorChat.getControlador();
+                        if (in.readLine().contains("PUERTO:")) {
+                            this.puerto = in.readLine().replace("[CONTROL]PUERTO:", "");
+                        }
+
+                        if (in.readLine().contains("IP:")) {
+                            this.ip = in.readLine().replace("[CONTROL]IP:","");
+                        }
+
+                        if (puerto != null && ip != null) {
+                            ControladorChat.getControlador(ip, puerto, true);
                         }
                     }
                 }
@@ -75,5 +85,13 @@ public class Listener implements ChatInterface {
     public void pararEscucha() {
         usuario.finalizarEscucha();
         this.eschuchando = false;
+    }
+
+    public static Listener getListener(){
+        if (listener == null) {
+            listener = new Listener();
+        }
+
+        return  listener;
     }
 }
