@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.negocio;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
+import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 
 import java.io.BufferedReader;
@@ -36,7 +37,6 @@ public class Conector implements ChatInterface  {
 
             mapper = new ObjectMapper();
 
-
             enviarMensaje(("[CONTROL][INICIAR_CHAT]"));
             enviarMensaje("[CONTROL]IP:" + usuario.getIp());
             enviarMensaje("[CONTROL]PUERTO:" + usuario.getPuerto());
@@ -51,6 +51,9 @@ public class Conector implements ChatInterface  {
 
         try {
             out.println(mapper.writeValueAsString(mensaje));
+            if (!contenido.contains("[CONTROL]")) {
+                Sesion.getSesion().getMensajes().add(mensaje);
+            }
             System.out.println("Mensaje enviado: " + contenido);
         } catch (Exception e) {
             System.out.println("Error enviando mensaje: " + e.getMessage());

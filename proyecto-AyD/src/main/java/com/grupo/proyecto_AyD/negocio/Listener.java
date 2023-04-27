@@ -77,6 +77,8 @@ public class Listener implements ChatInterface {
                         if (puerto != null && ip != null) {
                             ControladorChat.getControlador(ip, puerto, true);
                         }
+                    } else  {
+                        Sesion.getSesion().getMensajes().add(mensaje);
                     }
                 }
             } catch (Exception e){
