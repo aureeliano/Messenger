@@ -41,7 +41,7 @@ public class ControladorEscuchando implements ActionListener {
 
         switch (comando) {
             case "volver":
-                usuario.finalizarEscucha();
+                listener.pararEscucha();
                 ControladorMainMenu.getControlador();
                 vistaEscuchando.esconder();
                 break;

@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 
 public class Listener implements ChatInterface {
     private ServerSocket serverSocket;
@@ -22,13 +23,20 @@ public class Listener implements ChatInterface {
     private boolean eschuchando = false;
 
     private ObjectMapper mapper;
+    private Usuario usuario;
 
 
     public void init(String ip, int puerto) {
+        this.usuario = Usuario.getUsuario();
+
         try {
             serverSocket = new ServerSocket(puerto);
             this.eschuchando = true;
             mapper = new ObjectMapper();
+
+            URL url = new URL("http://checkip.amazonaws.com/");
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            usuario.setIp(br.readLine());
 
             escuchar();
         } catch (IOException e) {
@@ -50,8 +58,10 @@ public class Listener implements ChatInterface {
                     out = new PrintWriter(soc.getOutputStream(), true);
                     in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 
-                    if (in.readLine().contains("INICIAR_CHAT")) {
-                        ControladorChat.getControlador();
+                    if (in.readLine().contains("[CONTROL]")) {
+                        if (in.readLine().contains("[INICIAR_CHAT]")) {
+                            ControladorChat.getControlador();
+                        }
                     }
                 }
             } catch (Exception e){
@@ -63,6 +73,7 @@ public class Listener implements ChatInterface {
     }
 
     public void pararEscucha() {
+        usuario.finalizarEscucha();
         this.eschuchando = false;
     }
 }
