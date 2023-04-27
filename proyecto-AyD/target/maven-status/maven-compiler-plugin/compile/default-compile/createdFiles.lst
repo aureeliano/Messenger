@@ -4,7 +4,6 @@ com\grupo\proyecto_AyD\tipos\EstadoUsuario.class
 com\grupo\proyecto_AyD\vistas\VistaConfiguracion$1.class
 com\grupo\proyecto_AyD\dtos\Configuracion.class
 com\grupo\proyecto_AyD\vistas\InterfazEscuchando.class
-com\grupo\proyecto_AyD\negocio\Conector$1.class
 com\grupo\proyecto_AyD\modelo\Mensaje.class
 com\grupo\proyecto_AyD\vistas\VistaEscuchando.class
 com\grupo\proyecto_AyD\vistas\InterfazConfiguracion.class
@@ -16,11 +15,9 @@ com\grupo\proyecto_AyD\controlador\ControladorConectar.class
 com\grupo\proyecto_AyD\modelo\Sesion.class
 com\grupo\proyecto_AyD\vistas\VistaChat.class
 com\grupo\proyecto_AyD\App.class
-com\grupo\proyecto_AyD\negocio\GestionDeRed.class
 com\grupo\proyecto_AyD\vistas\InterfazConectar.class
 com\grupo\proyecto_AyD\vistas\MainMenu$2.class
 com\grupo\proyecto_AyD\persistencia\IPersistencia.class
-com\grupo\proyecto_AyD\negocio\Listener$1.class
 com\grupo\proyecto_AyD\dtos\UsuarioDTO.class
 com\grupo\proyecto_AyD\persistencia\PersistenciaXML.class
 com\grupo\proyecto_AyD\vistas\VistaConectar.class
@@ -33,6 +30,7 @@ com\grupo\proyecto_AyD\vistas\VistaEscuchando$1.class
 com\grupo\proyecto_AyD\negocio\Conector.class
 com\grupo\proyecto_AyD\vistas\VistaConectar$1.class
 com\grupo\proyecto_AyD\vistas\MainMenu$3.class
+com\grupo\proyecto_AyD\negocio\ChatInterface.class
 com\grupo\proyecto_AyD\vistas\MainMenu$1.class
 com\grupo\proyecto_AyD\vistas\InterfazBase.class
 com\grupo\proyecto_AyD\controlador\ControladorConfiguracion.class

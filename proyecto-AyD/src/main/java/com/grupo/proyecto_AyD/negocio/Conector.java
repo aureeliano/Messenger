@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
@@ -26,9 +27,7 @@ public class Conector implements ChatInterface  {
         this.usuario = Usuario.getUsuario();
 
         try {
-            URL url = new URL("http://checkip.amazonaws.com/");
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            usuario.setIp(br.readLine());
+            usuario.setIp(InetAddress.getLocalHost().getHostAddress());
 
             System.out.println("Intentando conectar a: " + ip + ":" + puerto);
             socket = new Socket(ip, puerto);
