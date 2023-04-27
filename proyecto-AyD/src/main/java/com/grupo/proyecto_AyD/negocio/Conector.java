@@ -20,6 +20,8 @@ public class Conector implements ChatInterface  {
     private BufferedReader in;
     private ObjectMapper mapper;
     private Usuario usuario;
+    private String targetIp;
+    private int targetPuerto;
 
     private static Conector conector;
 
@@ -31,9 +33,8 @@ public class Conector implements ChatInterface  {
             usuario.setIp(InetAddress.getLocalHost().getHostAddress());
 
             System.out.println("Intentando conectar a: " + ip + ":" + puerto);
-            socket = new Socket(ip, puerto);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.targetIp = ip;
+            this.targetPuerto = puerto;
 
             mapper = new ObjectMapper();
 
@@ -50,10 +51,17 @@ public class Conector implements ChatInterface  {
         Mensaje mensaje = new Mensaje(contenido);
 
         try {
+            socket = new Socket(targetIp, targetPuerto);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
             out.println(mapper.writeValueAsString(mensaje));
+
             if (!contenido.contains("[CONTROL]")) {
                 Sesion.getSesion().getMensajes().add(mensaje);
             }
+
+            out.flush();
+            out.close();
             System.out.println("Mensaje enviado: " + contenido);
         } catch (Exception e) {
             System.out.println("Error enviando mensaje: " + e.getMessage());
