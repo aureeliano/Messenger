@@ -11,7 +11,7 @@ public class MainMenu extends JFrame implements InterfazBase {
 	private JButton btnIniciarConversacion; 
 	private JButton btnIniciarEscucha;
 	private JButton btnConfigurarPuerto;
-	private JTextPane txtpnMenuPrincipal;
+	private JLabel txtpnMenuPrincipal;
 	private JButton btnSalir;
 	
 	/**
@@ -85,11 +85,11 @@ public class MainMenu extends JFrame implements InterfazBase {
 		btnConfigurarPuerto.setBounds(27, 249, 388, 54);
 		panel.add(btnConfigurarPuerto);
 		
-		txtpnMenuPrincipal = new JTextPane();
+		txtpnMenuPrincipal = new JLabel();
 		txtpnMenuPrincipal.setBackground(SystemColor.window);
 		txtpnMenuPrincipal.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtpnMenuPrincipal.setText("Menu Principal");
-		txtpnMenuPrincipal.setBounds(157, 10, 125, 28);
+		txtpnMenuPrincipal.setBounds(160, 28, 118, 28);
 		panel.add(txtpnMenuPrincipal);
 		
 		btnSalir = new JButton("Salir");
