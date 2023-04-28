@@ -68,6 +68,27 @@ public class Conector implements ChatInterface  {
         }
     }
 
+    //Este metodo se usa en caso de que el usuario se desconecte
+    public void finalizarConexion() {
+        try {
+            enviarMensaje("[CONTROL][FINALIZAR_CHAT]");
+            manejarDesconexion();
+        } catch (Exception e) {
+            System.out.println("Error al cerrar el socket: " + e.getMessage());
+        }
+    }
+
+    //Este metodo se usa en caso de que el compañero se desconecte
+    public void manejarDesconexion() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Error al cerrar el socket: " + e.getMessage());
+        }
+    }
+
+
+
     public static Conector getConector() {
         if (conector == null) {
             conector = new Conector();

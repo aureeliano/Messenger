@@ -5,12 +5,14 @@ import com.grupo.proyecto_AyD.negocio.Conector;
 import com.grupo.proyecto_AyD.negocio.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazChat;
 import com.grupo.proyecto_AyD.vistas.VistaChat;
+import lombok.Getter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControladorChat implements ActionListener {
     private static ControladorChat controladorChat = null;
+    @Getter
     private InterfazChat vistaChat;
 
     private Usuario usuario;
@@ -28,7 +30,7 @@ public class ControladorChat implements ActionListener {
             controladorChat = new ControladorChat();
         }
 
-        controladorChat.conector = new Conector();
+        controladorChat.conector = Conector.getConector();
 
         controladorChat.conector.init(ip, Integer.parseInt(puerto));
 
@@ -37,8 +39,17 @@ public class ControladorChat implements ActionListener {
             controladorChat.listener.init("", Usuario.getUsuario().getPuerto());
         }
 
+        controladorChat.vistaChat.setIpCompañero(ip);
+
         controladorChat.vistaChat.mostrar();
         return controladorChat;
+    }
+
+    public void finalizarChat() {
+        conector.manejarDesconexion();
+        vistaChat.mostrarMensaje("El compañero ha finalizado la conversación");
+        vistaChat.esconder();
+        ControladorMainMenu.getControlador();
     }
 
 
@@ -52,6 +63,11 @@ public class ControladorChat implements ActionListener {
                     break;
                 }
                 usuario.getInterfazActiva().enviarMensaje(vistaChat.getMensaje());
+                ControladorMainMenu.getControlador();
+                vistaChat.esconder();
+                break;
+            case "salir":
+                conector.finalizarConexion();
                 ControladorMainMenu.getControlador();
                 vistaChat.esconder();
                 break;

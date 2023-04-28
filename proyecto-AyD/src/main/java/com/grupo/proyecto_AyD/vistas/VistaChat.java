@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.awt.Color;
+import java.util.List;
 
 public class VistaChat extends JFrame implements InterfazChat {
 
@@ -22,6 +24,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 	private JList<Mensaje> listMensajes;
 	@Setter
 	private ActionListener actionListener;
+	private JButton btnSalir;
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +47,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 	public VistaChat() {
 		setTitle("Chat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 478, 296);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.text);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -58,8 +61,14 @@ public class VistaChat extends JFrame implements InterfazChat {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnEnviar.setBounds(366, 229, 68, 32);
+		btnEnviar.setBounds(366, 229, 99, 32);
 		contentPane.add(btnEnviar);
+		
+		btnSalir = new JButton("Salir");
+		btnSalir.setBackground(Color.WHITE);
+		btnSalir.setActionCommand("salir");
+		btnSalir.setBounds(366, -4, 99, 32);
+		contentPane.add(btnSalir);
 		
 		textFieldMensaje = new JTextField();
 		textFieldMensaje.setForeground(SystemColor.activeCaptionBorder);
@@ -72,15 +81,15 @@ public class VistaChat extends JFrame implements InterfazChat {
 		txtpnChateandoConIp = new JLabel();
 		txtpnChateandoConIp.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtpnChateandoConIp.setText("Chateando con IP: ");
-		txtpnChateandoConIp.setBounds(84, 0, 134, 26);
+		txtpnChateandoConIp.setBounds(10, -3, 134, 26);
 		contentPane.add(txtpnChateandoConIp);
 		
 		textFieldIP = new JTextField();
-		textFieldIP.setBounds(219, 0, 99, 26);
+		textFieldIP.setBounds(137, 0, 99, 26);
 		contentPane.add(textFieldIP);
 		textFieldIP.setColumns(10);
 		
-		listMensajes = new JList();
+		listMensajes = new JList<Mensaje>();
 		listMensajes.setBounds(0, 27, 434, 210);
 		contentPane.add(listMensajes);
 	}
@@ -111,5 +120,10 @@ public class VistaChat extends JFrame implements InterfazChat {
 	@Override
 	public void setIpCompañero(String ip) {
 		textFieldIP.setText(ip);
+	}
+
+	@Override
+	public void setMensajes(List<Mensaje> mensajes) {
+		listMensajes.setListData(mensajes.toArray(new Mensaje[0]));
 	}
 }
