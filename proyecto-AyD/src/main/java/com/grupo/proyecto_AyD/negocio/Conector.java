@@ -31,8 +31,6 @@ public class Conector implements ChatInterface  {
 
         try {
             usuario.setIp(InetAddress.getLocalHost().getHostAddress());
-
-            System.out.println("Intentando conectar a: " + ip + ":" + puerto);
             this.targetIp = ip;
             this.targetPuerto = puerto;
 
