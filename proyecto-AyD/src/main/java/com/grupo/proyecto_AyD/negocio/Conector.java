@@ -13,6 +13,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
 
 public class Conector implements ChatInterface  {
     private Socket socket;
@@ -47,11 +49,11 @@ public class Conector implements ChatInterface  {
     }
 
     @Override
-    public void enviarMensaje(String contenido) {
+    public List<Mensaje> enviarMensaje(String contenido) {
         Mensaje mensaje = new Mensaje(contenido);
 
         try {
-            System.out.println("Intentando enviar mensaje: " );
+            System.out.println("Intentando enviar mensaje: " + contenido);
             socket = new Socket(targetIp, targetPuerto);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -65,9 +67,19 @@ public class Conector implements ChatInterface  {
             out.flush();
             out.close();
             System.out.println("Mensaje enviado: " + contenido);
+
+            return Sesion.getSesion().getMensajes()
+                    .stream()
+                    .sorted(Comparator.comparing(Mensaje::getFecha))
+                    .toList();
         } catch (Exception e) {
             System.out.println("Error enviando mensaje: " + e.getMessage());
         }
+
+        return Sesion.getSesion().getMensajes()
+                .stream()
+                .sorted(Comparator.comparing(Mensaje::getFecha))
+                .toList();
     }
 
     //Este metodo se usa en caso de que el usuario se desconecte

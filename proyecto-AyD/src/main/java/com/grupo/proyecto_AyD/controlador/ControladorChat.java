@@ -1,5 +1,6 @@
 package com.grupo.proyecto_AyD.controlador;
 
+import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.negocio.Conector;
 import com.grupo.proyecto_AyD.negocio.Listener;
@@ -9,6 +10,7 @@ import lombok.Getter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ControladorChat implements ActionListener {
     private static ControladorChat controladorChat = null;
@@ -62,20 +64,20 @@ public class ControladorChat implements ActionListener {
         String comando = e.getActionCommand();
 
         switch (comando) {
-            case "enviar":
-                if (vistaChat.getMensaje().equals("")) {
+            case "enviar" -> {
+                String mensaje = vistaChat.getMensaje();
+                if (mensaje.equals("")) {
                     break;
                 }
-                conector.enviarMensaje(vistaChat.getMensaje());
-                ControladorMainMenu.getControlador();
-                vistaChat.esconder();
-                break;
-            case "salir":
+                List<Mensaje> mensajes = conector.enviarMensaje(mensaje);
+                vistaChat.setMensajes(mensajes);
+            }
+            case "salir" -> {
                 conector.finalizarConexion();
                 ControladorMainMenu.getControlador();
                 visible = false;
                 vistaChat.esconder();
-                break;
+            }
         }
     }
 }

@@ -1,8 +1,12 @@
 package com.grupo.proyecto_AyD.negocio;
 
+import com.grupo.proyecto_AyD.modelo.Mensaje;
+
+import java.util.List;
+
 public interface ChatInterface {
 
     void init(String ip, int puerto, boolean desdeChat);
 
-    void enviarMensaje(String mensaje);
+    List<Mensaje> enviarMensaje(String mensaje);
 }

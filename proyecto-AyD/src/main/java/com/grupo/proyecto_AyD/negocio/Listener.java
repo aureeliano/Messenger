@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class Listener implements ChatInterface {
     private ServerSocket serverSocket;
@@ -51,8 +53,8 @@ public class Listener implements ChatInterface {
     }
 
     @Override
-    public void enviarMensaje(String mensaje) {
-
+    public List<Mensaje> enviarMensaje(String mensaje) {
+        return new ArrayList<>();
     }
 
 

@@ -22,7 +22,6 @@ public class VistaChat extends JFrame implements InterfazChat {
 	private JTextField textFieldMensaje;
 	private JLabel txtpnChateandoConIp;
 	private JList<Mensaje> listMensajes;
-	@Setter
 	private ActionListener actionListener;
 	private JButton btnSalir;
 	/**
@@ -112,6 +111,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 	@Override
 	public String getMensaje() {
 		String mensaje = textFieldMensaje.getText();
+
 		textFieldMensaje.setText("");
 
 		return mensaje;
@@ -125,5 +125,12 @@ public class VistaChat extends JFrame implements InterfazChat {
 	@Override
 	public void setMensajes(List<Mensaje> mensajes) {
 		listMensajes.setListData(mensajes.toArray(new Mensaje[0]));
+	}
+
+	@Override
+	public void setActionListener(ActionListener actionListener) {
+		this.actionListener = actionListener;
+		this.btnEnviar.addActionListener(actionListener);
+		this.btnSalir.addActionListener(actionListener);
 	}
 }
