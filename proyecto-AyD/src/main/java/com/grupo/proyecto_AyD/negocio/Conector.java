@@ -26,7 +26,7 @@ public class Conector implements ChatInterface  {
     private static Conector conector;
 
 
-    public void init(String ip, int puerto) {
+    public void init(String ip, int puerto, boolean desdeChat) {
         this.usuario = Usuario.getUsuario();
 
         try {
@@ -49,9 +49,11 @@ public class Conector implements ChatInterface  {
         Mensaje mensaje = new Mensaje(contenido);
 
         try {
+            System.out.println("Intentando enviar mensaje: " );
             socket = new Socket(targetIp, targetPuerto);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+
             out.println(mapper.writeValueAsString(mensaje));
 
             if (!contenido.contains("[CONTROL]")) {

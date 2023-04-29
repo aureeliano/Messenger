@@ -30,7 +30,7 @@ public class Listener implements ChatInterface {
     private static Listener listener;
 
 
-    public void init(String ip, int puerto) {
+    public void init(String ip, int puerto, boolean desdeChat) {
         this.usuario = Usuario.getUsuario();
 
         try {
@@ -41,7 +41,7 @@ public class Listener implements ChatInterface {
             this.eschuchando = true;
             mapper = new ObjectMapper();
 
-            escuchar();
+            escuchar(desdeChat);
 
             System.out.println("Escuchando en puerto: " + usuario.getPuerto());
         } catch (IOException e) {
@@ -55,11 +55,8 @@ public class Listener implements ChatInterface {
 
     }
 
-    public void conectar() {
 
-    }
-
-    private void escuchar() {
+    private void escuchar(boolean desdeChat) {
         Thread thread = new Thread(() -> {
             try {
                 ControladorChat controlador = null;
@@ -84,7 +81,7 @@ public class Listener implements ChatInterface {
                                 this.ip = mensaje.getMensaje().replace("[CONTROL]IP:", "");
                             }
 
-                            if (puerto != null && ip != null) {
+                            if (puerto != null && ip != null && !desdeChat) {
                                 controlador = ControladorChat.getControlador(ip, puerto, true);
                             }
 

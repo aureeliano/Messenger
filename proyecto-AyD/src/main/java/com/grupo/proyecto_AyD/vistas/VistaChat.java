@@ -73,7 +73,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 		textFieldMensaje = new JTextField();
 		textFieldMensaje.setForeground(SystemColor.activeCaptionBorder);
 		textFieldMensaje.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		textFieldMensaje.setText("Escriba su mensaje aqui...");
+		textFieldMensaje.setToolTipText("Escriba su mensaje aqui...");
 		textFieldMensaje.setBounds(0, 229, 367, 32);
 		contentPane.add(textFieldMensaje);
 		textFieldMensaje.setColumns(10);
