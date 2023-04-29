@@ -51,6 +51,10 @@ public class ControladorChat implements ActionListener {
         return controladorChat;
     }
 
+    public static ControladorChat getControlador() {
+        return controladorChat;
+    }
+
     public void finalizarChat() {
         conector.manejarDesconexion();
         vistaChat.mostrarMensaje("El compañero ha finalizado la conversación");
