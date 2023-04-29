@@ -19,6 +19,9 @@ public class ControladorChat implements ActionListener {
     private Conector conector;
     private Listener listener;
 
+    @Getter
+    private boolean visible;
+
     private ControladorChat() {
         vistaChat = new VistaChat();
         vistaChat.setActionListener(this);
@@ -32,11 +35,12 @@ public class ControladorChat implements ActionListener {
 
         controladorChat.conector = Conector.getConector();
 
-        controladorChat.conector.init(ip, Integer.parseInt(puerto));
+        controladorChat.conector.init(ip, Integer.parseInt(puerto), false);
+        controladorChat.visible = true;
 
         if (!existeListener) {
             controladorChat.listener = Listener.getListener();
-            controladorChat.listener.init("", Usuario.getUsuario().getPuerto());
+            controladorChat.listener.init("", Usuario.getUsuario().getPuerto(), true);
         }
 
         controladorChat.vistaChat.setIpCompañero(ip);
@@ -62,13 +66,14 @@ public class ControladorChat implements ActionListener {
                 if (vistaChat.getMensaje().equals("")) {
                     break;
                 }
-                usuario.getInterfazActiva().enviarMensaje(vistaChat.getMensaje());
+                conector.enviarMensaje(vistaChat.getMensaje());
                 ControladorMainMenu.getControlador();
                 vistaChat.esconder();
                 break;
             case "salir":
                 conector.finalizarConexion();
                 ControladorMainMenu.getControlador();
+                visible = false;
                 vistaChat.esconder();
                 break;
         }
