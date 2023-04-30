@@ -93,6 +93,7 @@ public class Listener implements ChatInterface {
                             if (mensaje.getMensaje().contains("[FINALIZAR_CHAT]")) {
                                 assert controlador != null;
 
+                                pararEscucha();
                                 controlador.finalizarChat();
                             }
                         } else {
