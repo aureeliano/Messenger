@@ -19,7 +19,6 @@ public class Usuario {
     private String ip;
     private EstadoUsuario estado;
     private String id;
-    private ChatInterface interfazActiva;
 
 
     private Usuario(String nombre, int puerto) {
@@ -46,9 +45,8 @@ public class Usuario {
         }
     }
 
-    public void iniciarEscucha(ChatInterface chat) {
+    public void iniciarEscucha() {
         this.estado = EstadoUsuario.ESCUCHANDO;
-        this.interfazActiva = chat;
         updateIp();
     }
 
@@ -57,9 +55,8 @@ public class Usuario {
         updateIp();
     }
 
-    public void iniciarConexion(ChatInterface chat) {
+    public void iniciarConexion() {
         this.estado = EstadoUsuario.CONECTADO;
-        this.interfazActiva = chat;
         updateIp();
     }
 

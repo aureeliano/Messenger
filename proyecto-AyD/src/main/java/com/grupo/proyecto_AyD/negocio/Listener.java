@@ -37,6 +37,7 @@ public class Listener implements ChatInterface {
 
         try {
             usuario.setIp(InetAddress.getLocalHost().getHostAddress());
+            usuario.iniciarEscucha();
 
             serverSocket = new ServerSocket(puerto);
 
