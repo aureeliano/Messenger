@@ -84,6 +84,7 @@ public class VistaChat extends JFrame implements InterfazChat {
 		contentPane.add(txtpnChateandoConIp);
 		
 		textFieldIP = new JTextField();
+		textFieldIP.setEnabled(false);
 		textFieldIP.setBounds(137, 0, 99, 26);
 		contentPane.add(textFieldIP);
 		textFieldIP.setColumns(10);

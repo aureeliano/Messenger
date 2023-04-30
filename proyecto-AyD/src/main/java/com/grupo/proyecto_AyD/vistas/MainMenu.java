@@ -55,7 +55,6 @@ public class MainMenu extends JFrame implements InterfazBase {
 		btnIniciarConversacion = new JButton("Iniciar Conversacion");
 		btnIniciarConversacion.setActionCommand("iniciarConversacion");
 		btnIniciarConversacion.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		btnIniciarConversacion.setBackground(SystemColor.text);
 		btnIniciarConversacion.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnIniciarConversacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -66,7 +65,6 @@ public class MainMenu extends JFrame implements InterfazBase {
 		
 		btnIniciarEscucha = new JButton("Iniciar Escucha");
 		btnIniciarEscucha.setActionCommand("iniciarEscucha");
-		btnIniciarEscucha.setBackground(SystemColor.text);
 		btnIniciarEscucha.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnIniciarEscucha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
