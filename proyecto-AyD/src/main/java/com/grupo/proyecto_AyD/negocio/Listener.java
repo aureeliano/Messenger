@@ -85,6 +85,8 @@ public class Listener implements ChatInterface {
 
                             if (puerto != null && ip != null && !desdeChat) {
                                 controlador = ControladorChat.getControlador(ip, puerto, true);
+                            } else {
+                                controlador = ControladorChat.getControlador();
                             }
 
                             if (mensaje.getMensaje().contains("[FINALIZAR_CHAT]")) {
