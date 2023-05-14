@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Clase que se encarga de escuchar las conexiones entrantes, con arquitectura P2P
+ * @see com.grupo.proyecto_AyD.negocio.ListenerServidor
+ * que sigue la arquitectura cliente-servidor
+ */
 public class Listener implements ChatInterface {
     private ServerSocket serverSocket;
     private Socket socket;
