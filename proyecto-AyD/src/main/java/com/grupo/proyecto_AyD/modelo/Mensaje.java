@@ -15,13 +15,13 @@ public class Mensaje {
     private Date fecha;
     private String mensaje;
     private String id;
-    private String remitente;
+    private Usuario remitente;
 
     public Mensaje(String mensaje) {
         this.fecha = Date.from(Instant.now());
         this.mensaje = mensaje;
         this.id = UUID.randomUUID().toString();
-        this.remitente = Usuario.getUsuario().getNombre();
+        this.remitente = Usuario.getUsuario();
     }
 
     @Override

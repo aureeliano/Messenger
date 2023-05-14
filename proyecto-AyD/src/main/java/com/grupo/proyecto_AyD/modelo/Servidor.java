@@ -1,6 +1,8 @@
 package com.grupo.proyecto_AyD.modelo;
 
+import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -10,8 +12,14 @@ public class Servidor {
   private static Servidor servidor = null;
   @Getter
   private String ip;
+  @Getter
+  @Setter
   private List<Usuario> usuariosConectados;
+  @Getter
+  @Setter
   private List<Sesion> chatsActivos;
+
+  private Usuario usuario;
 
   private Servidor() {
     try {
@@ -19,6 +27,12 @@ public class Servidor {
     } catch (Exception e) {
       System.out.println("Error al obtener la ip del servidor: " + e.getMessage());
     }
+
+    usuario = Usuario.getUsuario();
+
+    usuario.setNombre("SERVIDOR");
+    usuario.setIp(this.ip);
+    usuario.setEstado(EstadoUsuario.ESCUCHANDO);
 
     this.usuariosConectados = new ArrayList<>();
     this.chatsActivos = new ArrayList<>();
