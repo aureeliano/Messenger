@@ -1,13 +1,12 @@
 package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
-import com.grupo.proyecto_AyD.negocio.Listener;
+import com.grupo.proyecto_AyD.red.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazEscuchando;
 import com.grupo.proyecto_AyD.vistas.VistaEscuchando;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class ControladorEscuchando implements ActionListener {
     private static ControladorEscuchando controladorEscuchando = null;

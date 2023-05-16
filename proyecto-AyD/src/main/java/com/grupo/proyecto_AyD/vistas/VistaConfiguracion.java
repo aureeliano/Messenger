@@ -13,9 +13,7 @@ import java.awt.event.ActionListener;
 public class VistaConfiguracion extends JFrame implements InterfazConfiguracion {
 
 	private JPanel contentPane;
-	private JTextField textFieldPuerto;
 	private JButton btnAceptar;
-	private JLabel txtpnIngreseUnPuerto;
 	private JLabel txtNombre;
 	private JTextField textFieldNombre;
 	private ActionListener actionListener;
@@ -42,40 +40,28 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 	public VistaConfiguracion() {
 		setTitle("Configuracion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 466, 272);
+		setBounds(100, 100, 463, 206);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textFieldPuerto = new JTextField();
-		textFieldPuerto.setBounds(36, 51, 378, 29);
-		contentPane.add(textFieldPuerto);
-		textFieldPuerto.setColumns(10);
-		
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setActionCommand("aceptar");
 		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAceptar.setBounds(161, 187, 136, 29);
+		btnAceptar.setBounds(158, 112, 136, 29);
 		contentPane.add(btnAceptar);
-		
-		txtpnIngreseUnPuerto = new JLabel();
-		txtpnIngreseUnPuerto.setBackground(SystemColor.control);
-		txtpnIngreseUnPuerto.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtpnIngreseUnPuerto.setText("Ingrese un puerto para escuchar. EJ: 8080");
-		txtpnIngreseUnPuerto.setBounds(36, 22, 297, 29);
-		contentPane.add(txtpnIngreseUnPuerto);
 		
 		txtNombre = new JLabel();
 		txtNombre.setText("Ingrese un nickname");
 		txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtNombre.setBackground(SystemColor.menu);
-		txtNombre.setBounds(36, 91, 297, 29);
+		txtNombre.setBounds(36, 32, 297, 29);
 		contentPane.add(txtNombre);
 		
 		textFieldNombre = new JTextField();
 		textFieldNombre.setColumns(10);
-		textFieldNombre.setBounds(36, 119, 378, 29);
+		textFieldNombre.setBounds(36, 72, 378, 29);
 		contentPane.add(textFieldNombre);
 	}
 
@@ -105,11 +91,10 @@ public class VistaConfiguracion extends JFrame implements InterfazConfiguracion 
 
 	@Override
 	public Integer getPuerto() {
-		return Integer.valueOf(textFieldPuerto.getText());
+		return 0;
 	}
 
 	public void setPuerto(Integer puerto) {
-		textFieldPuerto.setText(puerto.toString());
 	}
 
 	@Override

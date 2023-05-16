@@ -1,4 +1,4 @@
-package com.grupo.proyecto_AyD.negocio;
+package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 

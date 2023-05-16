@@ -1,6 +1,5 @@
 package com.grupo.proyecto_AyD.modelo;
 
-import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,7 @@ import java.util.*;
 @Setter
 public class Sesion {
     private String id;
-    private Set<UsuarioDTO> usuarios;
+    private Set<Usuario> usuarios;
     private List<Mensaje> mensajes;
 
     public static Sesion sesion;

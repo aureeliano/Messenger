@@ -1,4 +1,4 @@
-package com.grupo.proyecto_AyD.negocio;
+package com.grupo.proyecto_AyD.red;
 
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 

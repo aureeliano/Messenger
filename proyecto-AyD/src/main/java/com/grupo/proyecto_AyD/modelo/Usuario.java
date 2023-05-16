@@ -1,14 +1,16 @@
 package com.grupo.proyecto_AyD.modelo;
 
-import com.grupo.proyecto_AyD.negocio.ChatInterface;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.URL;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @Setter
@@ -30,16 +32,15 @@ public class Usuario {
 
     public static Usuario getUsuario() {
         if (usuario == null) {
-            usuario = new Usuario(UUID.randomUUID().toString(), 8080);
+            int puerto = ThreadLocalRandom.current().nextInt(3000, 4001);
+            usuario = new Usuario(UUID.randomUUID().toString(), puerto);
         }
         return usuario;
     }
 
     private void updateIp() {
         try {
-            URL url = new URL("http://checkip.amazonaws.com/");
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            this.ip = br.readLine();
+            this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (Exception e) {
             System.out.println("Error al obtener la ip: " + e.getMessage());
         }
@@ -62,7 +63,8 @@ public class Usuario {
 
     public void actualizarInformacion(String nombre, int puerto) {
         this.nombre = nombre;
-        this.puerto = puerto;
+        //Por ahora no vamos a actualizar el puerto
+        //this.puerto = puerto;
         updateIp();
     }
 

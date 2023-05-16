@@ -2,8 +2,8 @@ package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Usuario;
-import com.grupo.proyecto_AyD.negocio.Conector;
-import com.grupo.proyecto_AyD.negocio.Listener;
+import com.grupo.proyecto_AyD.red.Conector;
+import com.grupo.proyecto_AyD.red.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazChat;
 import com.grupo.proyecto_AyD.vistas.VistaChat;
 import lombok.Getter;

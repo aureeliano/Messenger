@@ -1,7 +1,7 @@
 package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
-import com.grupo.proyecto_AyD.negocio.Conector;
+import com.grupo.proyecto_AyD.red.Conector;
 import com.grupo.proyecto_AyD.vistas.InterfazConectar;
 import com.grupo.proyecto_AyD.vistas.VistaConectar;
 import lombok.Getter;

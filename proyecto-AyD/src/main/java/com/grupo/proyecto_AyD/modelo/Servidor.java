@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Servidor {
   private static Servidor servidor = null;
@@ -14,7 +16,7 @@ public class Servidor {
   private String ip;
   @Getter
   @Setter
-  private List<Usuario> usuariosConectados;
+  private Set<Usuario> usuariosConectados;
   @Getter
   @Setter
   private List<Sesion> chatsActivos;
@@ -34,7 +36,7 @@ public class Servidor {
     usuario.setIp(this.ip);
     usuario.setEstado(EstadoUsuario.ESCUCHANDO);
 
-    this.usuariosConectados = new ArrayList<>();
+    this.usuariosConectados = new HashSet<>();
     this.chatsActivos = new ArrayList<>();
   }
 

@@ -1,18 +1,14 @@
-package com.grupo.proyecto_AyD.negocio;
+package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorChat;
-import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
-import com.grupo.proyecto_AyD.excepcion.ChatTerminadoException;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
-import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,7 +16,7 @@ import java.util.List;
 
 /**
  * Clase que se encarga de escuchar las conexiones entrantes, con arquitectura P2P
- * @see com.grupo.proyecto_AyD.negocio.ListenerServidor
+ * @see com.grupo.proyecto_AyD.red.ListenerServidor
  * que sigue la arquitectura cliente-servidor
  */
 public class Listener implements ChatInterface {

@@ -1,4 +1,4 @@
-package com.grupo.proyecto_AyD.negocio;
+package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
@@ -14,27 +14,21 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
 
-public class ConectorServidor implements ChatInterface {
+public class ConectorServidor {
 
   private Socket socket;
   private PrintWriter out;
   private BufferedReader in;
   private ObjectMapper mapper;
   private Usuario usuario;
-  private String targetIp;
-  private int targetPuerto;
-
   private static ConectorServidor conector;
 
 
-  public void init(String ip, int puerto, boolean desdeChat) {
+  public void init() {
     this.usuario = Usuario.getUsuario();
 
     try {
       usuario.setIp(InetAddress.getLocalHost().getHostAddress());
-      this.targetIp = ip;
-      this.targetPuerto = puerto;
-
       mapper = new ObjectMapper();
 
     } catch (IOException e) {
@@ -42,13 +36,12 @@ public class ConectorServidor implements ChatInterface {
     }
   }
 
-  @Override
-  public List<Mensaje> enviarMensaje(String contenido) {
+  public List<Mensaje> enviarMensaje(Usuario usuario, String contenido) {
     Mensaje mensaje = new Mensaje(contenido);
 
     try {
       System.out.println("Intentando enviar mensaje: " + contenido);
-      socket = new Socket(targetIp, targetPuerto);
+      socket = new Socket(usuario.getIp(), usuario.getPuerto());
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -77,9 +70,9 @@ public class ConectorServidor implements ChatInterface {
   }
 
   //Este metodo se usa en caso de que el usuario se desconecte
-  public void finalizarConexion() {
+  public void finalizarConexion(Usuario usuario) {
     try {
-      enviarMensaje("[CONTROL][FINALIZAR_CHAT]");
+      enviarMensaje(usuario, "[CONTROL][FINALIZAR_CHAT]");
       manejarDesconexion();
     } catch (Exception e) {
       System.out.println("Error al cerrar el socket: " + e.getMessage());
