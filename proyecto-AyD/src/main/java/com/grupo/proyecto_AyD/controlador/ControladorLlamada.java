@@ -19,8 +19,9 @@ public class ControladorLlamada implements ActionListener {
 
     private ControladorLlamada() {
         conector = Conector.getConector();
-        InterfazLlamada vistaLlamada = new VistaLlamada();
+        vistaLlamada = new VistaLlamada();
         vistaLlamada.setActionListener(this);
+        mapper = new ObjectMapper();
     }
 
     public static ControladorLlamada getControladorLlamada() {
@@ -50,6 +51,7 @@ public class ControladorLlamada implements ActionListener {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                vistaLlamada.esconder();
                 break;
             case "aceptar":
                 try {
@@ -57,6 +59,7 @@ public class ControladorLlamada implements ActionListener {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                vistaLlamada.esconder();
                 ControladorChat.getControlador(solicitud.getSolicitante().getIp(), true);
                 break;
         }

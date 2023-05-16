@@ -5,6 +5,7 @@ import com.grupo.proyecto_AyD.controlador.ControladorServidor;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Servidor;
+import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
@@ -25,8 +26,8 @@ public class ListenerServidor {
   private ServerSocket serverSocket;
   private BufferedReader in;
   private boolean eschuchando = false;
-  private ObjectMapper mapper;
-  private Servidor servidor;
+  private final ObjectMapper mapper;
+  private final Servidor servidor;
 
   private ConectorServidor conectorServidor;
 
@@ -123,6 +124,23 @@ public class ListenerServidor {
                 SolicitudLlamadaDTO solicitudLlamadaDTO = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
                 procesarLlamada(solicitudLlamadaDTO);
               }
+
+              if (contenido.contains("[LLAMADA]")) {
+                contenido = contenido.replace("[LLAMADA]", "");
+
+                if (contenido.contains("[ACEPTAR]")) {
+                  contenido = contenido.replace("[ACEPTAR]", "");
+                  SolicitudLlamadaDTO solicitudLlamadaDTO = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
+
+                  manejarAceptar(solicitudLlamadaDTO);
+                }
+                if (contenido.contains("[RECHAZAR]")) {
+                  contenido = contenido.replace("[RECHAZAR]", "");
+                  SolicitudLlamadaDTO solicitudLlamadaDTO = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
+
+                  manejarRechazar(solicitudLlamadaDTO);
+                }
+              }
             }
           }
 
@@ -152,6 +170,7 @@ public class ListenerServidor {
       if (EstadoUsuario.ESCUCHANDO.equals(destinatario.get().getEstado())) {
         try {
           conectorServidor.enviarMensaje(destinatario.get(), "[CONTROL][CONECTAR][SOLICITUD]" + mapper.writeValueAsString(solicitud));
+          conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR]Llamando...");
         } catch (Exception e) {
           System.out.println("Error al enviar solicitud: " + e.getMessage());
         }
@@ -159,6 +178,25 @@ public class ListenerServidor {
         conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR]El usuario no se encuentra escuchando");
       }
     }
+  }
+
+  private void manejarAceptar(SolicitudLlamadaDTO solicitud) {
+    Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
+    Usuario destinatario = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getDestino().getIp()) && u.getPuerto() == solicitud.getDestino().getPuerto()).findFirst().orElse(null);
+
+    conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ACEPTAR]");
+
+    Sesion sesion = new Sesion();
+    sesion.getUsuarios().add(remitente);
+    sesion.getUsuarios().add(destinatario);
+
+    servidor.getChatsActivos().add(sesion);
+  }
+
+  private void manejarRechazar(SolicitudLlamadaDTO solicitud) {
+    Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
+
+    conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR]Compañero rechazó la llamada");
   }
 
 }
