@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -141,6 +142,8 @@ public class ListenerServidor {
                   manejarRechazar(solicitudLlamadaDTO);
                 }
               }
+            } else {
+              manejarMensaje(mensaje);
             }
           }
 
@@ -190,6 +193,14 @@ public class ListenerServidor {
     sesion.getUsuarios().add(remitente);
     sesion.getUsuarios().add(destinatario);
 
+    remitente.setEstado(EstadoUsuario.CONECTADO);
+    quitarUsuario(remitente);
+    destinatario.setEstado(EstadoUsuario.CONECTADO);
+    quitarUsuario(destinatario);
+
+    servidor.getUsuariosConectados().add(remitente);
+    servidor.getUsuariosConectados().add(destinatario);
+
     servidor.getChatsActivos().add(sesion);
   }
 
@@ -197,6 +208,31 @@ public class ListenerServidor {
     Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
 
     conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR]Compañero rechazó la llamada");
+  }
+
+  private void manejarMensaje(Mensaje mensaje) {
+    Usuario remitente = mensaje.getRemitente();
+    Sesion sesion = servidor
+            .getChatsActivos()
+            .stream().filter(c -> c.getUsuarios().stream().anyMatch(usuario -> usuario.getIp().equals(remitente.getIp()) && usuario.getPuerto() == remitente.getPuerto()))
+            .findFirst()
+            .orElse(null);
+
+    if (sesion != null) {
+      List<Usuario> destinatarios = sesion.getUsuarios().stream().filter(u -> !u.getIp().equals(remitente.getIp()) && u.getPuerto() != remitente.getPuerto())
+              .toList();
+
+      destinatarios.forEach(d -> {
+        try {
+          conectorServidor.enviarMensaje(d, mapper.writeValueAsString(mensaje));
+        } catch (Exception e) {
+          System.out.println("Error procesando mensaje:" + e);
+        }
+      });
+
+      sesion.getMensajes().add(mensaje);
+    }
+
   }
 
 }

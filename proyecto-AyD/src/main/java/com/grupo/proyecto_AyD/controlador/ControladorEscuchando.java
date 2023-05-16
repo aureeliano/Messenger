@@ -35,6 +35,10 @@ public class ControladorEscuchando implements ActionListener {
         return controladorEscuchando;
     }
 
+    public void esconder() {
+        vistaEscuchando.esconder();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();

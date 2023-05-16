@@ -35,6 +35,10 @@ public class ControladorConectar implements ActionListener {
         return controladorConectar;
     }
 
+    public void esconder() {
+        vistaConectar.esconder();
+    }
+
     public void setEstado(String estado) {
         vistaConectar.setEstado(estado);
     }

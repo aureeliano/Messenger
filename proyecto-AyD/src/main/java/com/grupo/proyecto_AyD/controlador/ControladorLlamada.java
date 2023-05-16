@@ -60,6 +60,7 @@ public class ControladorLlamada implements ActionListener {
                     ex.printStackTrace();
                 }
                 vistaLlamada.esconder();
+                ControladorEscuchando.getControlador().esconder();
                 ControladorChat.getControlador(solicitud.getSolicitante().getIp(), true);
                 break;
         }

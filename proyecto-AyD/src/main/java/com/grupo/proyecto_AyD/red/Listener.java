@@ -109,6 +109,12 @@ public class Listener implements ChatInterface {
                                 ControladorLlamada.getControladorLlamada().setDatosSolicitud(solicitud);
                             }
 
+                            if (contenido.contains("[CONECTAR][ACEPTAR]")) {
+                                contenido = contenido.replace("[CONECTAR][ACEPTAR]", "");
+                                ControladorConectar.getControlador().esconder();
+                                ControladorChat.getControlador("", true);
+                            }
+
                             if (contenido.contains("[CONECTAR][ERROR]")) {
                                 contenido = contenido.replace("[CONECTAR][ERROR]", "");
                                 ControladorConectar.getControlador().setEstado(contenido);

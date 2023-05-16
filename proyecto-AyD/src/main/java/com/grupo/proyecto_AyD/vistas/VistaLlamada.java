@@ -77,12 +77,12 @@ public class VistaLlamada implements InterfazLlamada {
 		frame.getContentPane().add(textFieldIp);
 		
 		btnAceptar = new JButton("ACEPTAR");
-		btnAceptar.setBounds(10, 227, 89, 23);
+		btnAceptar.setBounds(10, 227, 121, 23);
 		btnAceptar.setActionCommand("aceptar");
 		frame.getContentPane().add(btnAceptar);
 		
 		btnRechazar = new JButton("RECHAZAR");
-		btnRechazar.setBounds(335, 227, 89, 23);
+		btnRechazar.setBounds(303, 227, 121, 23);
 		btnRechazar.setActionCommand("rechazar");
 		frame.getContentPane().add(btnRechazar);
 	}

@@ -26,6 +26,6 @@ public class Mensaje {
 
     @Override
     public String toString() {
-        return this.remitente + ": " + this.mensaje;
+        return this.remitente.getNombre() + ": " + this.mensaje;
     }
 }
