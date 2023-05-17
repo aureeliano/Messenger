@@ -30,6 +30,7 @@ public class ControladorEscuchando implements ActionListener {
         controladorEscuchando.conector.enviarMensaje("[CONTROL][ESCUCHANDO][INICIAR]");
 
         controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
+        controladorEscuchando.vistaEscuchando.setPuerto(Usuario.getUsuario().getPuerto());
         controladorEscuchando.vistaEscuchando.mostrar();
         return controladorEscuchando;
     }
@@ -40,7 +41,7 @@ public class ControladorEscuchando implements ActionListener {
 
         switch (comando) {
             case "volver":
-                conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]")
+                conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
                 ControladorMainMenu.getControlador();
                 vistaEscuchando.esconder();
                 break;

@@ -88,6 +88,7 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 		getContentPane().add(lblEstadoDeLa);
 		
 		txtEstado = new JTextField();
+		txtEstado.setEditable(false);
 		txtEstado.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtEstado.setColumns(10);
 		txtEstado.setText("Esperando");

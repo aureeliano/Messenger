@@ -86,7 +86,7 @@ public class ListenerServidor {
                   System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(),"[CONTROL]IP:" + servidor.getIp());
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL]PUERTO:3000");
-                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL][CONEXION][OK]");
+                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL][CONEXION_CLIENTE][OK]");
                 }
               }
 
@@ -112,6 +112,7 @@ public class ListenerServidor {
 
                   mensaje.getRemitente().setEstado(EstadoUsuario.INACTIVO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
+                  ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                   System.out.println("[SERVIDOR] Usuario inactivo: " + mensaje.getRemitente());
                 }
@@ -144,7 +145,7 @@ public class ListenerServidor {
     Optional<Usuario> destinatario = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getDestino().getIp()) && u.getPuerto() == solicitud.getDestino().getPuerto()).findFirst();
 
     if (destinatario.isEmpty()) {
-      conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR]Usuario desconectado");
+      conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ERROR] Usuario desconectado");
     }
 
     if (destinatario.isPresent()) {

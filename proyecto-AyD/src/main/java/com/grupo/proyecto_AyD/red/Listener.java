@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorChat;
+import com.grupo.proyecto_AyD.controlador.ControladorConectar;
 import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
 import com.grupo.proyecto_AyD.controlador.ControladorLlamada;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
@@ -81,7 +82,7 @@ public class Listener implements ChatInterface {
 
                         if (contenido.contains("[CONTROL]")) {
                             contenido = contenido.replace("[CONTROL]", "");
-                            if (contenido.contains("[CONEXION][OK]")) {
+                            if (contenido.contains("[CONEXION_CLIENTE][OK]")) {
                                 ControladorConectarServidor.confirmarConexion();
                             }
 
@@ -93,26 +94,26 @@ public class Listener implements ChatInterface {
                                 this.ip = mensaje.getMensaje().replace("[CONTROL]IP:", "");
                             }
 
-                            if (puerto != null && ip != null) {
-                                controlador = ControladorChat.getControlador(ip, puerto, true, false);
-                            } else {
-                                controlador = ControladorChat.getControlador();
-                            }
-
-                            if (mensaje.getMensaje().contains("[FINALIZAR_CHAT]")) {
+                            if (contenido.contains("[FINALIZAR_CHAT]")) {
                                 assert controlador != null;
 
                                 pararEscucha();
                                 controlador.finalizarChat();
                             }
 
-                            if (mensaje.getMensaje().contains("[CONECTAR][SOLICITUD]")) {
+                            if (contenido.contains("[CONECTAR][SOLICITUD]")) {
                                 contenido = contenido.replace("[CONECTAR][SOLICITUD]", "");
                                 SolicitudLlamadaDTO solicitud = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
                                 solicitudes.add(solicitud);
 
-                                ControladorLlamada.getControladorLlamada().setParametros(solicitud.getSolicitante().getNombre(), solicitud.getDestino().getIp());
+                                ControladorLlamada.getControladorLlamada().setDatosSolicitud(solicitud);
                             }
+
+                            if (contenido.contains("[CONECTAR][ERROR]")) {
+                                contenido = contenido.replace("[CONECTAR][ERROR]", "");
+                                ControladorConectar.getControlador().setEstado(contenido);
+                            }
+
                         } else {
                             // Controlador nunca deberia ser null, primero llegan los mensajes de control
                             Sesion sesion = Sesion.getSesion();

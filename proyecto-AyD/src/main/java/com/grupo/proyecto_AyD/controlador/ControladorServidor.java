@@ -21,6 +21,7 @@ public class ControladorServidor implements ActionListener {
   private ControladorServidor() {
     vistaServidor = new VistaServidor();
     servidor = Servidor.getServidor();
+    vistaServidor.setActionListener(this);
 
     listenerServidor = ListenerServidor.getListenerServidor();
     listenerServidor.init();

@@ -29,10 +29,14 @@ public class ControladorConectar implements ActionListener {
             controladorConectar = new ControladorConectar();
         }
 
-        controladorConectar.setConector(new Conector());
+        controladorConectar.setConector(Conector.getConector());
 
         controladorConectar.vistaConectar.mostrar();
         return controladorConectar;
+    }
+
+    public void setEstado(String estado) {
+        vistaConectar.setEstado(estado);
     }
 
     @Override

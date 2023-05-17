@@ -8,6 +8,7 @@ C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyec
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaConectarServidor.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\red\ListenerServidor.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\red\Conector.java
+C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\InterfazLlamada.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaEscuchando.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\excepcion\ChatTerminadoException.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\controlador\ControladorChat.java
@@ -17,6 +18,7 @@ C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyec
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaServidor.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\red\ConectorServidor.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\red\ChatInterface.java
+C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\dtos\SolicitudLlamadaDTO.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaChat.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\InterfazConectar.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\MainMenu.java
@@ -25,7 +27,10 @@ C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyec
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\InterfazBase.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\modelo\Usuario.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\InterfazConectarServidor.java
+C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\controlador\ControladorLlamada.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaConfiguracion.java
+C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\dtos\ExtremoDTO.java
+C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\vistas\VistaLlamada.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\AppServidor.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\controlador\ControladorMainMenu.java
 C:\Users\facun\Desktop\proyecto-AyD2\proyecto-AyD\src\main\java\com\grupo\proyecto_AyD\tipos\EstadoUsuario.java

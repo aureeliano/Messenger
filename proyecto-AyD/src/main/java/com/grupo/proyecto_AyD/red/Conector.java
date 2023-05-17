@@ -6,6 +6,8 @@ import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +26,8 @@ public class Conector implements ChatInterface  {
     private Usuario usuario;
     private String targetIp;
     private int targetPuerto;
+    private String ipServidor;
+    private int puertoServidor;
 
     private static Conector conector;
 
@@ -108,11 +112,18 @@ public class Conector implements ChatInterface  {
     public void enviarMensajeAServidor(String mensaje, String ip) {
         this.targetIp = ip;
         this.targetPuerto = 3000;
+        this.puertoServidor = 3000;
+        this.ipServidor = ip;
 
         enviarMensaje(mensaje);
     }
 
     public void iniciarChat(String ip, int puerto) {
+        this.targetIp = ipServidor;
+        this.targetPuerto = puertoServidor;
+        this.usuario = Usuario.getUsuario();
+        mapper = new ObjectMapper();
+
         SolicitudLlamadaDTO solicitudLlamadaDTO = new SolicitudLlamadaDTO();
         ExtremoDTO solicitante = new ExtremoDTO();
         ExtremoDTO destino = new ExtremoDTO();
