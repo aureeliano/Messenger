@@ -14,6 +14,8 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 	private JButton btnConectar;
 	private ActionListener actionListener;
 	private JButton btnVolver;
+	private JLabel lblEstadoDeLa;
+	private JTextField txtEstado;
 
 	/**
 	 * Launch the application.
@@ -42,14 +44,14 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 388, 343);
+		this.setBounds(100, 100, 402, 418);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(null);
 		
 		btnConectar = new JButton("Conectar");
 		btnConectar.setActionCommand("conectar");
 		btnConectar.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnConectar.setBounds(126, 201, 113, 40);
+		btnConectar.setBounds(126, 274, 113, 40);
 		this.getContentPane().add(btnConectar);
 		
 		JLabel lblIp = new JLabel("Ingrese la IP de compañero");
@@ -77,8 +79,20 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 		btnVolver = new JButton("Volver");
 		btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnVolver.setActionCommand("volver");
-		btnVolver.setBounds(126, 261, 113, 40);
+		btnVolver.setBounds(126, 325, 113, 40);
 		getContentPane().add(btnVolver);
+		
+		lblEstadoDeLa = new JLabel("Estado de la conexion:");
+		lblEstadoDeLa.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblEstadoDeLa.setBounds(10, 193, 361, 33);
+		getContentPane().add(lblEstadoDeLa);
+		
+		txtEstado = new JTextField();
+		txtEstado.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtEstado.setColumns(10);
+		txtEstado.setText("Esperando");
+		txtEstado.setBounds(10, 230, 361, 33);
+		getContentPane().add(txtEstado);
 	}
 
 	public void setActionListener(ActionListener actionListener) {
@@ -107,5 +121,10 @@ public class VistaConectar extends JFrame implements InterfazConectar{
 
 	public String getPuerto() {
 		return this.txtPuerto.getText();
+	}
+	
+	@Override
+	public void setEstado(String estado) {
+		txtEstado.setText(estado);
 	}
 }

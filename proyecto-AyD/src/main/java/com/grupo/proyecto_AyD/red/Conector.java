@@ -1,6 +1,8 @@
 package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo.proyecto_AyD.dtos.ExtremoDTO;
+import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -108,5 +110,22 @@ public class Conector implements ChatInterface  {
         this.targetPuerto = 3000;
 
         enviarMensaje(mensaje);
+    }
+
+    public void iniciarChat(String ip, int puerto) {
+        SolicitudLlamadaDTO solicitudLlamadaDTO = new SolicitudLlamadaDTO();
+        ExtremoDTO solicitante = new ExtremoDTO();
+        ExtremoDTO destino = new ExtremoDTO();
+
+        solicitante.setIp(usuario.getIp());
+        solicitante.setPuerto(usuario.getPuerto());
+        solicitante.setNombre(usuario.getNombre());
+        destino.setIp(ip);
+        destino.setPuerto(puerto);
+
+        solicitudLlamadaDTO.setSolicitante(solicitante);
+        solicitudLlamadaDTO.setDestino(destino);
+
+        enviarMensaje("[CONTROL][CONECTAR]" + mapper.valueToTree(solicitudLlamadaDTO).toString());
     }
 }
