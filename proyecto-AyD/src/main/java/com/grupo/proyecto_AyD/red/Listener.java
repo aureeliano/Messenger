@@ -124,7 +124,9 @@ public class Listener implements ChatInterface {
                             // Controlador nunca deberia ser null, primero llegan los mensajes de control
                             Sesion sesion = Sesion.getSesion();
                             sesion.getMensajes().add(mensaje);
-                            assert controlador != null;
+                            if (controlador == null) {
+                                controlador = ControladorChat.getControlador();
+                            }
 
                             controlador
                                     .getVistaChat()

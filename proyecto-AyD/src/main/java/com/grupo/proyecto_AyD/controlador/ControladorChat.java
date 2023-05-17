@@ -50,7 +50,7 @@ public class ControladorChat implements ActionListener {
     }
 
     public void finalizarChat() {
-        conector.manejarDesconexion();
+        conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
         vistaChat.mostrarMensaje("El compañero ha finalizado la conversación");
         vistaChat.esconder();
         ControladorMainMenu.getControlador();
@@ -71,7 +71,7 @@ public class ControladorChat implements ActionListener {
                 vistaChat.setMensajes(mensajes);
             }
             case "salir" -> {
-                conector.finalizarConexion();
+                conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
                 ControladorMainMenu.getControlador();
                 visible = false;
                 vistaChat.esconder();

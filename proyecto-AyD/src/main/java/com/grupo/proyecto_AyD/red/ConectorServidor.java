@@ -36,7 +36,7 @@ public class ConectorServidor {
     }
   }
 
-  public List<Mensaje> enviarMensaje(Usuario usuario, String contenido) {
+  public void enviarMensaje(Usuario usuario, String contenido) {
     Mensaje mensaje = new Mensaje(contenido);
 
     try {
@@ -47,26 +47,32 @@ public class ConectorServidor {
 
       out.println(mapper.writeValueAsString(mensaje));
 
-      if (!contenido.contains("[CONTROL]")) {
-        Sesion.getSesion().getMensajes().add(mensaje);
-      }
-
       out.flush();
       out.close();
       System.out.println("Mensaje enviado: " + contenido);
 
-      return Sesion.getSesion().getMensajes()
-              .stream()
-              .sorted(Comparator.comparing(Mensaje::getFecha))
-              .toList();
     } catch (Exception e) {
       System.out.println("Error enviando mensaje: " + e.getMessage());
     }
 
-    return Sesion.getSesion().getMensajes()
-            .stream()
-            .sorted(Comparator.comparing(Mensaje::getFecha))
-            .toList();
+  }
+
+  public void reenviarMensaje(Usuario usuario, Mensaje mensaje) {
+    try {
+      System.out.println("Intentando reenviar mensaje: " + mensaje.getMensaje());
+      socket = new Socket(usuario.getIp(), usuario.getPuerto());
+      in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      out = new PrintWriter(socket.getOutputStream(), true);
+
+      out.println(mapper.writeValueAsString(mensaje));
+
+      out.flush();
+      out.close();
+      System.out.println("Mensaje reenviado: " + mensaje.getMensaje());
+
+    } catch (Exception e) {
+      System.out.println("Error enviando mensaje: " + e.getMessage());
+    }
   }
 
   //Este metodo se usa en caso de que el usuario se desconecte

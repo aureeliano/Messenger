@@ -78,6 +78,10 @@ public class ListenerServidor {
             String contenido = mensaje.getMensaje();
 
             if (contenido.contains("[CONTROL]")) {
+              if (contenido.contains("[FINALIZAR_CHAT]")) {
+                manejarMensaje(mensaje);
+              }
+
               contenido = contenido.replace("[CONTROL]", "");
 
               if (contenido.contains("[CONEXION_CLIENTE]")){
@@ -201,6 +205,8 @@ public class ListenerServidor {
     servidor.getUsuariosConectados().add(remitente);
     servidor.getUsuariosConectados().add(destinatario);
 
+    ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
     servidor.getChatsActivos().add(sesion);
   }
 
@@ -219,12 +225,16 @@ public class ListenerServidor {
             .orElse(null);
 
     if (sesion != null) {
-      List<Usuario> destinatarios = sesion.getUsuarios().stream().filter(u -> !u.getIp().equals(remitente.getIp()) && u.getPuerto() != remitente.getPuerto())
-              .toList();
+      List<Usuario> destinatarios =
+              sesion
+                    .getUsuarios()
+                    .stream()
+                    .filter(u -> (!u.getIp().equals(remitente.getIp()) || u.getPuerto() != remitente.getPuerto()))
+                    .toList();
 
       destinatarios.forEach(d -> {
         try {
-          conectorServidor.enviarMensaje(d, mapper.writeValueAsString(mensaje));
+          conectorServidor.reenviarMensaje(d, mensaje);
         } catch (Exception e) {
           System.out.println("Error procesando mensaje:" + e);
         }
