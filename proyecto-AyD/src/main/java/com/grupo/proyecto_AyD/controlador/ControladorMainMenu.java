@@ -1,6 +1,8 @@
 package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.red.Conector;
+import com.grupo.proyecto_AyD.red.ConectorServidor;
 import com.grupo.proyecto_AyD.vistas.InterfazBase;
 import com.grupo.proyecto_AyD.vistas.MainMenu;
 
@@ -44,6 +46,7 @@ public class ControladorMainMenu implements ActionListener {
                 vistaMenu.esconder();
                 break;
             case "salir":
+                Conector.getConector().enviarMensaje("[CONTROL][DESCONEXION_CLIENTE]");
                 System.exit(0);
                 break;
         }

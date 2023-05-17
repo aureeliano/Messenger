@@ -5,6 +5,7 @@ import com.grupo.proyecto_AyD.controlador.ControladorServidor;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -43,6 +44,8 @@ public class ListenerServidor {
 
   public void init() {
     try {
+      conectorServidor = ConectorServidor.getConector();
+      conectorServidor.init();
       serverSocket = new ServerSocket(3000);
       this.eschuchando = true;
       escuchar();
@@ -68,16 +71,42 @@ public class ListenerServidor {
 
           if (mensajeCrudo != null) {
             Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
+            String contenido = mensaje.getMensaje();
 
-            if (mensaje.getMensaje().contains("[CONTROL]")) {
-              if (mensaje.getMensaje().contains("[CONEXION]")){
+            if (contenido.contains("[CONTROL]")) {
+              contenido = contenido.replace("[CONTROL]", "");
+
+              if (contenido.contains("[CONEXION_CLIENTE]")){
                 if (!this.servidor.getUsuariosConectados().contains(mensaje.getRemitente())) {
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                   System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
+                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(),"[CONTROL]IP:" + servidor.getIp());
+                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL]PUERTO:3000");
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL][CONEXION][OK]");
                 }
+              }
+
+              if (contenido.contains("[DESCONEXION_CLIENTE]")) {
+                Usuario remitente = mensaje.getRemitente();
+                quitarUsuario(remitente);
+                ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
+                System.out.println("[SERVIDOR] Usuario desconectado: " + mensaje.getRemitente());
+              }
+
+              if (contenido.contains("[ESCUCHANDO]")) {
+                quitarUsuario(mensaje.getRemitente());
+
+                mensaje.getRemitente().setEstado(EstadoUsuario.ESCUCHANDO);
+                this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
+                ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
+                System.out.println("[SERVIDOR] Usuario escuchando: " + mensaje.getRemitente());
+              }
+
+              if (contenido.contains("[CONECTAR]")) {
               }
             }
           }
@@ -89,6 +118,11 @@ public class ListenerServidor {
     });
 
     thread.start();
+  }
+
+
+  private void quitarUsuario(Usuario remitente) {
+    this.servidor.getUsuariosConectados().removeIf(u -> u.getIp().equals(remitente.getIp()) && u.getPuerto() == remitente.getPuerto());
   }
 
 }

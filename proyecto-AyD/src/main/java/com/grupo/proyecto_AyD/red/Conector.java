@@ -35,10 +35,6 @@ public class Conector implements ChatInterface  {
             this.targetPuerto = puerto;
 
             mapper = new ObjectMapper();
-
-            enviarMensaje(("[CONTROL][INICIAR_CHAT]"));
-            enviarMensaje("[CONTROL]IP:" + usuario.getIp());
-            enviarMensaje("[CONTROL]PUERTO:" + usuario.getPuerto());
         } catch (IOException e) {
             System.out.println("Error al iniciar el conector: " + e.getMessage());
         }
@@ -105,5 +101,12 @@ public class Conector implements ChatInterface  {
         }
 
         return conector;
+    }
+
+    public void enviarMensajeAServidor(String mensaje, String ip) {
+        this.targetIp = ip;
+        this.targetPuerto = 3000;
+
+        enviarMensaje(mensaje);
     }
 }

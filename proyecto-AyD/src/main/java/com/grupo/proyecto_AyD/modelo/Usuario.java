@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.modelo;
 
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class Usuario {
     private static Usuario usuario;
     private String nombre;
@@ -68,4 +70,12 @@ public class Usuario {
         updateIp();
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario u = (Usuario) o;
+        return u.getIp().equals(this.ip) && u.getPuerto() == this.puerto;
+    }
 }

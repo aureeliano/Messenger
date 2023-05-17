@@ -30,7 +30,7 @@ public class ControladorChat implements ActionListener {
         usuario = Usuario.getUsuario();
     }
 
-    public static ControladorChat getControlador(String ip, String puerto, boolean existeListener) {
+    public static ControladorChat getControlador(String ip, String puerto, boolean existeListener, boolean mostrar) {
         if (controladorChat == null) {
             controladorChat = new ControladorChat();
         }
@@ -47,7 +47,9 @@ public class ControladorChat implements ActionListener {
 
         controladorChat.vistaChat.setIpCompañero(ip);
 
-        controladorChat.vistaChat.mostrar();
+        if (mostrar)
+            controladorChat.vistaChat.mostrar();
+
         return controladorChat;
     }
 

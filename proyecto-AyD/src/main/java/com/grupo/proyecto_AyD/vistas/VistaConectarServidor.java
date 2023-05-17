@@ -59,6 +59,7 @@ public class VistaConectarServidor extends JFrame implements InterfazConectarSer
 		txtIPServidor.setColumns(10);
 		
 		btnConectar = new JButton("Conectar");
+		btnConectar.setActionCommand("conectar");
 		btnConectar.setBounds(172, 63, 89, 23);
 		getContentPane().add(btnConectar);
 	}

@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorChat;
+import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -38,8 +39,6 @@ public class Listener implements ChatInterface {
 
         try {
             usuario.setIp(InetAddress.getLocalHost().getHostAddress());
-            usuario.iniciarEscucha();
-
             serverSocket = new ServerSocket(puerto);
 
             this.eschuchando = true;
@@ -77,6 +76,10 @@ public class Listener implements ChatInterface {
                         Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
 
                         if (mensaje.getMensaje().contains("[CONTROL]")) {
+                            if (mensaje.getMensaje().contains("[CONEXION][OK]")) {
+                                ControladorConectarServidor.confirmarConexion();
+                            }
+
                             if (mensaje.getMensaje().contains("PUERTO:")) {
                                 this.puerto = mensaje.getMensaje().replace("[CONTROL]PUERTO:", "");
                             }
@@ -85,8 +88,8 @@ public class Listener implements ChatInterface {
                                 this.ip = mensaje.getMensaje().replace("[CONTROL]IP:", "");
                             }
 
-                            if (puerto != null && ip != null && !desdeChat) {
-                                controlador = ControladorChat.getControlador(ip, puerto, true);
+                            if (puerto != null && ip != null) {
+                                controlador = ControladorChat.getControlador(ip, puerto, true, false);
                             } else {
                                 controlador = ControladorChat.getControlador();
                             }

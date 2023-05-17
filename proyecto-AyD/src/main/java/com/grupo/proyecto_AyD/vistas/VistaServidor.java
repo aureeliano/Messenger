@@ -12,9 +12,8 @@ import javax.swing.border.EmptyBorder;
 public class VistaServidor extends JFrame implements InterfazServidor {
 	private JPanel contentPane;
 	private JTextField txtFieldIp;
-
-	private JList<UsuarioDTO> listUsuarios;
 	private JButton btnSalir;
+	private JList<UsuarioDTO> listaUsuarios;
 
 
 	/**
@@ -71,15 +70,14 @@ public class VistaServidor extends JFrame implements InterfazServidor {
 		lblConectados.setBounds(10, 55, 146, 14);
 		contentPane.add(lblConectados);
 		
-		listUsuarios = new JList<UsuarioDTO>();
-		listUsuarios.setEnabled(false);
-		listUsuarios.setBounds(10, 220, 414, -139);
-		contentPane.add(listUsuarios);
-		
 		btnSalir = new JButton("Cerrar Servidor");
 		btnSalir.setActionCommand("salir");
 		btnSalir.setBounds(10, 227, 146, 23);
 		contentPane.add(btnSalir);
+		
+		listaUsuarios = new JList<UsuarioDTO>();
+		listaUsuarios.setBounds(10, 80, 414, 136);
+		contentPane.add(listaUsuarios);
 	}
 
 	@Override
@@ -104,7 +102,7 @@ public class VistaServidor extends JFrame implements InterfazServidor {
 
 	@Override
 	public void setUsuariosConectados(List<UsuarioDTO> usuariosConectados) {
-		listUsuarios.setListData(usuariosConectados.toArray(new UsuarioDTO[0]));
+		listaUsuarios.setListData(usuariosConectados.toArray(new UsuarioDTO[0]));
 	}
 
 	@Override

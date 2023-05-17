@@ -20,4 +20,9 @@ public class UsuarioDTO {
 
         return usuarioDTO;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario: " + this.nombre + " Estado: " + this.estado;
+    }
 }
