@@ -1,0 +1,64 @@
+package com.grupo.proyecto_AyD.controlador;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
+import com.grupo.proyecto_AyD.red.Conector;
+import com.grupo.proyecto_AyD.vistas.InterfazLlamada;
+import com.grupo.proyecto_AyD.vistas.VistaLlamada;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ControladorLlamada implements ActionListener {
+    private static ControladorLlamada controladorLlamada = null;
+    private InterfazLlamada vistaLlamada;
+    private Conector conector;
+    private SolicitudLlamadaDTO solicitud;
+
+    private ObjectMapper mapper;
+
+    private ControladorLlamada() {
+        conector = Conector.getConector();
+        InterfazLlamada vistaLlamada = new VistaLlamada();
+        vistaLlamada.setActionListener(this);
+    }
+
+    public static ControladorLlamada getControladorLlamada() {
+        if (controladorLlamada == null) {
+            controladorLlamada = new ControladorLlamada();
+        }
+
+        controladorLlamada.vistaLlamada.mostrar();
+        return controladorLlamada;
+    }
+
+    public void setDatosSolicitud(SolicitudLlamadaDTO request) {
+        solicitud = request;
+        vistaLlamada.setUsuarioLlamada(request.getSolicitante().getNombre());
+        vistaLlamada.setIpLlamada(request.getSolicitante().getIp());
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
+
+        switch (comando) {
+            case "rechazar":
+                try {
+                    conector.enviarMensaje("[CONTROL][LLAMADA][RECHAZAR]" + mapper.writeValueAsString(solicitud));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "aceptar":
+                try {
+                    conector.enviarMensaje("[CONTROL][LLAMADA][ACEPTAR]" + mapper.writeValueAsString(solicitud));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                ControladorChat.getControlador(solicitud.getSolicitante().getIp(), true);
+                break;
+        }
+    }
+}

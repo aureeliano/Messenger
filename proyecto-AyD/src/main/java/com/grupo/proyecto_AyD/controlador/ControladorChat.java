@@ -19,7 +19,6 @@ public class ControladorChat implements ActionListener {
 
     private Usuario usuario;
     private Conector conector;
-    private Listener listener;
 
     @Getter
     private boolean visible;
@@ -28,22 +27,15 @@ public class ControladorChat implements ActionListener {
         vistaChat = new VistaChat();
         vistaChat.setActionListener(this);
         usuario = Usuario.getUsuario();
+        conector = Conector.getConector();
     }
 
-    public static ControladorChat getControlador(String ip, String puerto, boolean existeListener, boolean mostrar) {
+    public static ControladorChat getControlador(String ip, boolean mostrar) {
         if (controladorChat == null) {
             controladorChat = new ControladorChat();
         }
 
-        controladorChat.conector = Conector.getConector();
-
-        controladorChat.conector.init(ip, Integer.parseInt(puerto), false);
         controladorChat.visible = true;
-
-        if (!existeListener) {
-            controladorChat.listener = Listener.getListener();
-            controladorChat.listener.init("", Usuario.getUsuario().getPuerto(), true);
-        }
 
         controladorChat.vistaChat.setIpCompañero(ip);
 

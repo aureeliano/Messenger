@@ -18,6 +18,7 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 	private String ipEscuchando;
 	private ActionListener actionListener;
 	private JButton btnVolver;
+	private JTextField textFieldPuerto;
 
 	/**
 	 * Launch the application.
@@ -70,6 +71,18 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 		btnVolver.setActionCommand("volver");
 		btnVolver.setBounds(182, 112, 85, 21);
 		contentPane.add(btnVolver);
+		
+		JTextPane txtpnPuerto = new JTextPane();
+		txtpnPuerto.setToolTipText("");
+		txtpnPuerto.setText("Puerto: ");
+		txtpnPuerto.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtpnPuerto.setBounds(120, 73, 76, 20);
+		contentPane.add(txtpnPuerto);
+		
+		textFieldPuerto = new JTextField();
+		textFieldPuerto.setColumns(10);
+		textFieldPuerto.setBounds(198, 73, 86, 20);
+		contentPane.add(textFieldPuerto);
 	}
 
 	@Override
@@ -91,6 +104,11 @@ public class VistaEscuchando extends JFrame implements InterfazEscuchando {
 	public void setIpEscuchando(String ip) {
 		ipEscuchando = ip;
 		textFieldIP.setText(ipEscuchando);
+	}
+	
+	@Override
+	public void setPuerto(Integer puerto) {
+		textFieldPuerto.setText(puerto.toString());
 	}
 
 	public void setActionListener(ActionListener actionListener) {

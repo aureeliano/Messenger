@@ -3,6 +3,8 @@ package com.grupo.proyecto_AyD.red;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorChat;
 import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
+import com.grupo.proyecto_AyD.controlador.ControladorLlamada;
+import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -30,6 +32,7 @@ public class Listener implements ChatInterface {
     private Usuario usuario;
     private String puerto;
     private String ip;
+    private final List<SolicitudLlamadaDTO> solicitudes = new ArrayList<>();
 
     private static Listener listener;
 
@@ -74,17 +77,19 @@ public class Listener implements ChatInterface {
 
                     if (mensajeCrudo != null) {
                         Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
+                        String contenido = mensaje.getMensaje();
 
-                        if (mensaje.getMensaje().contains("[CONTROL]")) {
-                            if (mensaje.getMensaje().contains("[CONEXION][OK]")) {
+                        if (contenido.contains("[CONTROL]")) {
+                            contenido = contenido.replace("[CONTROL]", "");
+                            if (contenido.contains("[CONEXION][OK]")) {
                                 ControladorConectarServidor.confirmarConexion();
                             }
 
-                            if (mensaje.getMensaje().contains("PUERTO:")) {
+                            if (contenido.contains("PUERTO:")) {
                                 this.puerto = mensaje.getMensaje().replace("[CONTROL]PUERTO:", "");
                             }
 
-                            if (mensaje.getMensaje().contains("IP:")) {
+                            if (contenido.contains("IP:")) {
                                 this.ip = mensaje.getMensaje().replace("[CONTROL]IP:", "");
                             }
 
@@ -99,6 +104,14 @@ public class Listener implements ChatInterface {
 
                                 pararEscucha();
                                 controlador.finalizarChat();
+                            }
+
+                            if (mensaje.getMensaje().contains("[CONECTAR][SOLICITUD]")) {
+                                contenido = contenido.replace("[CONECTAR][SOLICITUD]", "");
+                                SolicitudLlamadaDTO solicitud = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
+                                solicitudes.add(solicitud);
+
+                                ControladorLlamada.getControladorLlamada().setParametros(solicitud.getSolicitante().getNombre(), solicitud.getDestino().getIp());
                             }
                         } else {
                             // Controlador nunca deberia ser null, primero llegan los mensajes de control
