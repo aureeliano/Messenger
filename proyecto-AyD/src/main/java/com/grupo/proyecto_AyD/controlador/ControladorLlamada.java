@@ -8,6 +8,7 @@ import com.grupo.proyecto_AyD.vistas.VistaLlamada;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.UUID;
 
 public class ControladorLlamada implements ActionListener {
     private static ControladorLlamada controladorLlamada = null;
@@ -56,6 +57,8 @@ public class ControladorLlamada implements ActionListener {
             case "aceptar":
                 try {
                     conector.enviarMensaje("[CONTROL][LLAMADA][ACEPTAR]" + mapper.writeValueAsString(solicitud));
+                    conector.setClaveEncripcion(UUID.randomUUID().toString().replace("-", "").substring(0, 8));
+                    conector.enviarMensaje("[CONTROL][CLAVE]" + conector.getClaveEncripcion());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

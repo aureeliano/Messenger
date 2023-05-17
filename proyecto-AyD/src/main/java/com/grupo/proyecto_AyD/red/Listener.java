@@ -6,6 +6,7 @@ import com.grupo.proyecto_AyD.controlador.ControladorConectar;
 import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
 import com.grupo.proyecto_AyD.controlador.ControladorLlamada;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
+import com.grupo.proyecto_AyD.encriptacion.Encriptacion;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -17,6 +18,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Clase que se encarga de escuchar las conexiones entrantes, con arquitectura P2P
@@ -36,6 +38,10 @@ public class Listener implements ChatInterface {
     private final List<SolicitudLlamadaDTO> solicitudes = new ArrayList<>();
 
     private static Listener listener;
+
+    private String claveDesencriptacion;
+
+    private Encriptacion encriptacion = new Encriptacion();
 
 
     public void init(String ip, int puerto, boolean desdeChat) {
@@ -74,13 +80,15 @@ public class Listener implements ChatInterface {
                     in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 
                     String mensajeCrudo = in.readLine();
-                    System.out.println("MENSAJE RECIBIDO: " + mensajeCrudo);
 
                     if (mensajeCrudo != null) {
                         Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
                         String contenido = mensaje.getMensaje();
 
-                        if (contenido.contains("[CONTROL]")) {
+                        if (contenido != null && contenido.contains("[CONTROL]")) { //Significa que es un mensaje de control no encriptado
+
+                            System.out.println("MENSAJE DE CONTROL RECIBIDO: " + contenido);
+
                             contenido = contenido.replace("[CONTROL]", "");
                             if (contenido.contains("[CONEXION_CLIENTE][OK]")) {
                                 ControladorConectarServidor.confirmarConexion();
@@ -111,8 +119,20 @@ public class Listener implements ChatInterface {
 
                             if (contenido.contains("[CONECTAR][ACEPTAR]")) {
                                 contenido = contenido.replace("[CONECTAR][ACEPTAR]", "");
+                                Conector conector = Conector.getConector();
+                                conector.setClaveEncripcion(UUID.randomUUID().toString().replace("-","").substring(0, 8));
+                                conector.enviarMensaje("[CONTROL][CLAVE]" + conector.getClaveEncripcion());
+                                System.out.println("Clave encriptacion enviada: " + conector.getClaveEncripcion());
+
                                 ControladorConectar.getControlador().esconder();
                                 ControladorChat.getControlador("", true);
+                            }
+
+                            if (contenido.contains("[CLAVE]")) {
+                                contenido = contenido.replace("[CLAVE]", "");
+                                this.claveDesencriptacion = contenido;
+
+                                System.out.println("Clave desencriptacion recibida: " + this.claveDesencriptacion);
                             }
 
                             if (contenido.contains("[CONECTAR][ERROR]")) {
@@ -121,9 +141,14 @@ public class Listener implements ChatInterface {
                             }
 
                         } else {
-                            // Controlador nunca deberia ser null, primero llegan los mensajes de control
+                            Mensaje mensajeEncriptado = mapper.readValue(mensajeCrudo, Mensaje.class);
+                            System.out.println("Mensaje encriptado recibido: " + mensajeEncriptado.getContenidoEncriptado());
+
+                            Mensaje mensajeDesencriptado = mapper.readValue(encriptacion.desencriptar(mensajeEncriptado.getContenidoEncriptado(), claveDesencriptacion), Mensaje.class);
+                            System.out.println("Mensaje desencriptado: " + mensajeDesencriptado);
+
                             Sesion sesion = Sesion.getSesion();
-                            sesion.getMensajes().add(mensaje);
+                            sesion.getMensajes().add(mensajeDesencriptado);
                             if (controlador == null) {
                                 controlador = ControladorChat.getControlador();
                             }

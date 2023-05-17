@@ -77,8 +77,8 @@ public class ListenerServidor {
             Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
             String contenido = mensaje.getMensaje();
 
-            if (contenido.contains("[CONTROL]")) {
-              if (contenido.contains("[FINALIZAR_CHAT]")) {
+            if (contenido != null && contenido.contains("[CONTROL]")) {
+              if (contenido.contains("[FINALIZAR_CHAT]") || contenido.contains("[CLAVE]")) {
                 manejarMensaje(mensaje);
               }
 
@@ -242,6 +242,10 @@ public class ListenerServidor {
 
       sesion.getMensajes().add(mensaje);
     }
+
+  }
+
+  private void manejarMensaje(String mensaje) {
 
   }
 

@@ -3,6 +3,7 @@ package com.grupo.proyecto_AyD.red;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.dtos.ExtremoDTO;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
+import com.grupo.proyecto_AyD.encriptacion.Encriptacion;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -31,6 +32,12 @@ public class Conector implements ChatInterface  {
 
     private static Conector conector;
 
+    @Getter
+    @Setter
+    private String claveEncripcion;
+
+    private Encriptacion encriptacion = new Encriptacion();
+
 
     public void init(String ip, int puerto, boolean desdeChat) {
         this.usuario = Usuario.getUsuario();
@@ -48,7 +55,6 @@ public class Conector implements ChatInterface  {
 
     @Override
     public List<Mensaje> enviarMensaje(String contenido) {
-        Mensaje mensaje = new Mensaje(contenido);
 
         try {
             System.out.println("Intentando enviar mensaje: " + contenido);
@@ -56,10 +62,19 @@ public class Conector implements ChatInterface  {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            out.println(mapper.writeValueAsString(mensaje));
-
             if (!contenido.contains("[CONTROL]")) {
-                Sesion.getSesion().getMensajes().add(mensaje);
+                Mensaje mensaje = new Mensaje(null);
+
+                Mensaje mensajeEncriptado = new Mensaje(contenido);
+                mensaje.setContenidoEncriptado(encriptacion.encriptar(mapper.writeValueAsString(mensajeEncriptado), claveEncripcion));
+
+                Sesion.getSesion().getMensajes().add(mensajeEncriptado);
+
+                out.println(mapper.writeValueAsString(mensaje));
+            } else {
+                Mensaje mensaje = new Mensaje(contenido);
+
+                out.println(mapper.writeValueAsString(mensaje));
             }
 
             out.flush();

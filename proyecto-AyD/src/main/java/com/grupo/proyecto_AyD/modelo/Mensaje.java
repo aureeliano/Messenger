@@ -16,6 +16,7 @@ public class Mensaje {
     private String mensaje;
     private String id;
     private Usuario remitente;
+    private String contenidoEncriptado;
 
     public Mensaje(String mensaje) {
         this.fecha = Date.from(Instant.now());
