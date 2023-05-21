@@ -125,7 +125,7 @@ public class Listener implements ChatInterface {
                                 System.out.println("Clave encriptacion enviada: " + conector.getClaveEncripcion());
 
                                 ControladorConectar.getControlador().esconder();
-                                ControladorChat.getControlador("", true);
+                                ControladorChat.getControlador(mensaje.getRemitente().getIp(), true);
                             }
 
                             if (contenido.contains("[CLAVE]")) {

@@ -127,6 +127,12 @@ public class ListenerServidor {
               if (contenido.contains("[CONECTAR]")) {
                 contenido = contenido.replace("[CONECTAR]", "");
                 SolicitudLlamadaDTO solicitudLlamadaDTO = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
+                quitarUsuario(mensaje.getRemitente());
+
+                //Actualiza el nombre del usuario
+                this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
+                ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
                 procesarLlamada(solicitudLlamadaDTO);
               }
 
@@ -167,6 +173,7 @@ public class ListenerServidor {
 
   private void procesarLlamada(SolicitudLlamadaDTO solicitud) {
     Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
+
     Optional<Usuario> destinatario = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getDestino().getIp()) && u.getPuerto() == solicitud.getDestino().getPuerto()).findFirst();
 
     if (destinatario.isEmpty()) {
@@ -191,6 +198,9 @@ public class ListenerServidor {
     Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
     Usuario destinatario = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getDestino().getIp()) && u.getPuerto() == solicitud.getDestino().getPuerto()).findFirst().orElse(null);
 
+    quitarUsuario(remitente);
+    quitarUsuario(destinatario);
+
     conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ACEPTAR]");
 
     Sesion sesion = new Sesion();
@@ -198,16 +208,13 @@ public class ListenerServidor {
     sesion.getUsuarios().add(destinatario);
 
     remitente.setEstado(EstadoUsuario.CONECTADO);
-    quitarUsuario(remitente);
     destinatario.setEstado(EstadoUsuario.CONECTADO);
-    quitarUsuario(destinatario);
-
     servidor.getUsuariosConectados().add(remitente);
     servidor.getUsuariosConectados().add(destinatario);
+    servidor.getChatsActivos().add(sesion);
+
 
     ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
-
-    servidor.getChatsActivos().add(sesion);
   }
 
   private void manejarRechazar(SolicitudLlamadaDTO solicitud) {

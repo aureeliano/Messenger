@@ -6,6 +6,7 @@ import com.grupo.proyecto_AyD.red.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazEscuchando;
 import com.grupo.proyecto_AyD.vistas.VistaEscuchando;
 
+import javax.naming.ldap.Control;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,6 +33,14 @@ public class ControladorEscuchando implements ActionListener {
         controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
         controladorEscuchando.vistaEscuchando.setPuerto(Usuario.getUsuario().getPuerto());
         controladorEscuchando.vistaEscuchando.mostrar();
+        return controladorEscuchando;
+    }
+
+    public static ControladorEscuchando getSilenciosamente() {
+        if (controladorEscuchando == null) {
+            controladorEscuchando = new ControladorEscuchando();
+        }
+
         return controladorEscuchando;
     }
 
