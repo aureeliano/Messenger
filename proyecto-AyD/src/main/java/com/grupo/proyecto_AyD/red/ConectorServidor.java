@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
+import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import lombok.Setter;
@@ -101,6 +102,8 @@ public class ConectorServidor {
 
 
   private void iniciarBeats() {
+    enviarPuerto();
+
     new Thread(() -> {
       while (beat) {
         try {
@@ -127,19 +130,34 @@ public class ConectorServidor {
     }
   }
 
-  public void sincronizar() {
+  private void enviarPuerto() {
     try {
-      int target = 3001;
-      if (listenerServidor.getPuertoEscucha() == target) {
-        target = 3002;
-      }
-
-      socket = new Socket("localhost", target);
+      socket = new Socket("localhost", 3000);
       out = new PrintWriter(socket.getOutputStream(), true);
 
-      out.println("[SYNC]");
+      out.println("[PUERTO]" + listenerServidor.getPuertoEscucha());
 
       out.flush();
+      out.close();
+    } catch (Exception e) {
+      System.out.println("Error enviando heartbeat: " + e.getMessage());
+    }
+  }
+
+  public void sincronizar() {
+    try {
+      socket = new Socket("localhost", 3000);
+      out = new PrintWriter(socket.getOutputStream(), true);
+
+      out.println("[SYNC][USUARIOS]" + mapper.writeValueAsString(Servidor.getServidor().getUsuariosConectados()));
+      out.flush();
+      out.close();
+
+      socket = new Socket("localhost", 3000);
+      out = new PrintWriter(socket.getOutputStream(), true);
+      out.println("[SYNC][CHATS]" + mapper.writeValueAsString(Servidor.getServidor().getChatsActivos()));
+      out.flush();
+
       out.close();
     } catch (Exception e) {
       System.out.println("Error enviando heartbeat: " + e.getMessage());

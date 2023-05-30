@@ -14,22 +14,23 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ControladorServidor implements ActionListener {
-  private static ControladorServidor controladorServidor = null;
   private Servidor servidor;
   private InterfazServidor vistaServidor;
   private ListenerServidor listenerServidor;
   private ConectorServidor conectorServidor;
 
-  public ControladorServidor(int puerto) {
+  public ControladorServidor() {
     vistaServidor = new VistaServidor();
     servidor = Servidor.getServidor();
     vistaServidor.setActionListener(this);
 
     listenerServidor = new ListenerServidor(this);
     conectorServidor = new ConectorServidor();
+
+    listenerServidor.init(conectorServidor);
+
     conectorServidor.init();
 
-    listenerServidor.init(puerto, conectorServidor);
 
     vistaServidor.mostrar();
     vistaServidor.setIpServidor(servidor.getIp());
@@ -46,10 +47,7 @@ public class ControladorServidor implements ActionListener {
 
     switch (comando) {
       case "salir":
-        conectorServidor.terminar();
-        listenerServidor.terminar();
-        vistaServidor.esconder();
-
+        System.exit(0);
         break;
     }
   }

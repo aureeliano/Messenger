@@ -1,6 +1,7 @@
 package com.grupo.proyecto_AyD.red;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorServidor;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
@@ -19,6 +20,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -48,17 +50,25 @@ public class ListenerServidor {
   }
 
 
-  public void init(int puerto, ConectorServidor conector) {
+  public void init(ConectorServidor conector) {
     try {
       conectorServidor = conector;
       conectorServidor.setListenerServidor(this);
 
-      serverSocket = new ServerSocket(puerto);
-      this.puertoEscucha = puerto;
+      try {
+        // Se intenta levantar el servidor en el puerto 3001
+        serverSocket = new ServerSocket(3001);
+        this.puertoEscucha = 3001;
+      } catch (Exception e) {
+        //Si falla (porque ya hay un servidor levantado en ese puerto) se levanta en el 3002
+        serverSocket = new ServerSocket(3002);
+        this.puertoEscucha = 3002;
+      }
+
       this.eschuchando = true;
       escuchar();
 
-      System.out.println("[SERVIDOR] Escuchando en puerto: " + puerto);
+      System.out.println("[SERVIDOR] Escuchando en puerto: " + puertoEscucha);
     } catch (Exception e) {
       System.out.println("Error al iniciar el listener: " + e.getMessage());
       throw new RuntimeException(e);
@@ -69,7 +79,6 @@ public class ListenerServidor {
     Thread thread = new Thread(() -> {
       try {
         while (eschuchando) {
-          System.out.println("[SERVIDOR] Esperando conexiones...");
 
           Socket socket = serverSocket.accept();
           in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -105,6 +114,7 @@ public class ListenerServidor {
                 Usuario remitente = mensaje.getRemitente();
                 quitarUsuario(remitente);
                 controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                conectorServidor.sincronizar();
 
                 notificarConectados();
 
@@ -163,11 +173,13 @@ public class ListenerServidor {
                   manejarRechazar(solicitudLlamadaDTO);
                 }
               }
-            } else if (mensajeCrudo.contains("[SYNC]")) {
-              controladorServidor.actualizarConectados(Servidor.getServidor().getUsuariosConectados().stream().toList());
+
+              conectorServidor.sincronizar();
             } else {
               manejarMensaje(mensaje);
             }
+          } else if (mensajeCrudo.contains("[SYNC]")) {
+            manejarSync(mensajeCrudo);
           }
 
         }
@@ -282,20 +294,39 @@ public class ListenerServidor {
                       }
                     }
             );
-    notificarServidorHermano();
   }
 
-  private void notificarServidorHermano() {
-    conectorServidor.sincronizar();
-  }
 
-  public void terminar() {
-    eschuchando = false;
-    try {
-      serverSocket.close();
-    } catch (IOException e) {
-      System.out.println("Error al cerrar el socket: " + e.getMessage());
+  private void manejarSync(String mensajeCrudo) {
+    mensajeCrudo = mensajeCrudo.replace("[SYNC]", "");
+    if (mensajeCrudo.contains("[USUARIOS]")) {
+      mensajeCrudo = mensajeCrudo.replace("[USUARIOS]", "");
+
+      try {
+        Set<Usuario> usuarios = mapper.readValue(mensajeCrudo, new TypeReference<Set<Usuario>>() {});
+        this.servidor.setUsuariosConectados(usuarios);
+        controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
+        System.out.println("[SERVIDOR] Usuarios sincronizados");
+      } catch (JsonProcessingException e) {
+        System.out.println("Error al sincronizar usuarios: " + e.getMessage());
+      }
     }
+
+    if (mensajeCrudo.contains("[CHATS]")) {
+      mensajeCrudo = mensajeCrudo.replace("[CHATS]", "");
+
+      try {
+        List<Sesion> chats = mapper.readValue(mensajeCrudo, new TypeReference<List<Sesion>>() {});
+
+        this.servidor.setChatsActivos(chats);
+        System.out.println("[SERVIDOR] Chats sincronizados");
+      } catch (JsonProcessingException e) {
+        System.out.println("Error al sincronizar chats: " + e.getMessage());
+      }
+    }
+
+    controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
   }
 
 }

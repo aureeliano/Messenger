@@ -8,6 +8,6 @@ import java.io.IOException;
 public class AppServidor {
 
   public static void main( String[] args ) throws IOException {
-    Monitor.getMonitor().init();
+    new ControladorServidor();
   }
 }

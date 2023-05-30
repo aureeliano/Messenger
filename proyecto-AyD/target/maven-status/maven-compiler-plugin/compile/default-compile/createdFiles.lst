@@ -10,6 +10,7 @@ com\grupo\proyecto_AyD\AppServidor.class
 com\grupo\proyecto_AyD\vistas\VistaConectar.class
 com\grupo\proyecto_AyD\vistas\VistaLlamada$1.class
 com\grupo\proyecto_AyD\controlador\ControladorLlamada.class
+com\grupo\proyecto_AyD\red\Listener$1.class
 com\grupo\proyecto_AyD\controlador\ControladorConectarServidor.class
 com\grupo\proyecto_AyD\vistas\VistaEscuchando$1.class
 com\grupo\proyecto_AyD\vistas\VistaConectar$1.class
@@ -17,6 +18,7 @@ com\grupo\proyecto_AyD\red\Conector.class
 com\grupo\proyecto_AyD\vistas\MainMenu$3.class
 com\grupo\proyecto_AyD\vistas\VistaConectarServidor$1.class
 com\grupo\proyecto_AyD\dtos\SolicitudLlamadaDTO.class
+com\grupo\proyecto_AyD\vistas\InterfazMenu.class
 com\grupo\proyecto_AyD\controlador\ControladorMainMenu.class
 com\grupo\proyecto_AyD\red\ConectorServidor.class
 com\grupo\proyecto_AyD\vistas\MainMenu$5.class
@@ -30,6 +32,7 @@ com\grupo\proyecto_AyD\vistas\VistaServidor.class
 com\grupo\proyecto_AyD\modelo\Mensaje.class
 com\grupo\proyecto_AyD\vistas\VistaServidor$1.class
 com\grupo\proyecto_AyD\modelo\Usuario.class
+com\grupo\proyecto_AyD\seguridad\Monitor.class
 com\grupo\proyecto_AyD\vistas\VistaChat$1.class
 com\grupo\proyecto_AyD\vistas\VistaConfiguracion.class
 com\grupo\proyecto_AyD\controlador\ControladorConectar.class
