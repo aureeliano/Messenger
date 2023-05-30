@@ -113,13 +113,16 @@ public class Monitor {
                 System.out.println("[MONITOR] Sincronizando servidor pasivo: " + target);
               }
             } else {
-              Socket socketServidor = new Socket("localhost", puertoActual);
-              PrintWriter out = new PrintWriter(socketServidor.getOutputStream(), true);
-              out.println(mensajeCrudo);
+              String finalMensajeCrudo = mensajeCrudo;
+              EjecutorBackoff.ejecutarConBackoffExponencial(() -> {
+                Socket socketServidor = new Socket("localhost", puertoActual);
+                PrintWriter out = new PrintWriter(socketServidor.getOutputStream(), true);
+                out.println(finalMensajeCrudo);
 
-              out.flush();
-              out.close();
-              System.out.println("[MONITOR] Mensaje reenviado al servidor: " + puertoActual);
+                out.flush();
+                out.close();
+                System.out.println("[MONITOR] Mensaje reenviado al servidor: " + puertoActual);
+              }, 16000, "direccionarMensaje");
             }
           }
         }
