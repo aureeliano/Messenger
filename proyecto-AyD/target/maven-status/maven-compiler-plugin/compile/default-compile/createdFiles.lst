@@ -45,6 +45,7 @@ com\grupo\proyecto_AyD\persistencia\IPersistencia.class
 com\grupo\proyecto_AyD\vistas\InterfazConectarServidor.class
 com\grupo\proyecto_AyD\dtos\UsuarioDTO.class
 com\grupo\proyecto_AyD\persistencia\PersistenciaXML.class
+com\grupo\proyecto_AyD\encriptacion\Encriptacion.class
 com\grupo\proyecto_AyD\vistas\VistaConectarServidor.class
 com\grupo\proyecto_AyD\controlador\ControladorServidor.class
 com\grupo\proyecto_AyD\vistas\InterfazChat.class

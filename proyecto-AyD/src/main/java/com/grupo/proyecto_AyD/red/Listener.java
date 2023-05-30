@@ -1,11 +1,10 @@
 package com.grupo.proyecto_AyD.red;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo.proyecto_AyD.controlador.ControladorChat;
-import com.grupo.proyecto_AyD.controlador.ControladorConectar;
-import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
-import com.grupo.proyecto_AyD.controlador.ControladorLlamada;
+import com.grupo.proyecto_AyD.controlador.*;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
+import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.encriptacion.Encriptacion;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
@@ -124,8 +123,15 @@ public class Listener implements ChatInterface {
                                 conector.enviarMensaje("[CONTROL][CLAVE]" + conector.getClaveEncripcion());
                                 System.out.println("Clave encriptacion enviada: " + conector.getClaveEncripcion());
 
-                                ControladorConectar.getControlador().esconder();
+                                ControladorMainMenu.getControlador().esconder();
                                 ControladorChat.getControlador(mensaje.getRemitente().getIp(), true);
+                            }
+
+                            if (contenido.contains("[CONECTADOS]")) {
+                                contenido = contenido.replace("[CONECTADOS]", "");
+                                List<UsuarioDTO> conectados = mapper.readValue(contenido, new TypeReference<List<UsuarioDTO>>(){});
+
+                                ControladorMainMenu.getControlador(false).setConectados(conectados);
                             }
 
                             if (contenido.contains("[CLAVE]")) {
@@ -137,7 +143,7 @@ public class Listener implements ChatInterface {
 
                             if (contenido.contains("[CONECTAR][ERROR]")) {
                                 contenido = contenido.replace("[CONECTAR][ERROR]", "");
-                                ControladorConectar.getControlador().setEstado(contenido);
+                                ControladorMainMenu.getControlador().setEstado(contenido);
                             }
 
                         } else {

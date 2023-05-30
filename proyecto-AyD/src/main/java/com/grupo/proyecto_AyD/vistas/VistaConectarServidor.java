@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 public class VistaConectarServidor extends JFrame implements InterfazConectarServidor {
 	private JTextField txtIPServidor;
 	private JButton btnConectar;
+	private JLabel lblNombre;
+	private JTextField txtNombre;
 
 
 	/**
@@ -41,7 +43,7 @@ public class VistaConectarServidor extends JFrame implements InterfazConectarSer
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.setBounds(100, 100, 448, 130);
+		this.setBounds(100, 100, 448, 217);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
@@ -60,8 +62,21 @@ public class VistaConectarServidor extends JFrame implements InterfazConectarSer
 		
 		btnConectar = new JButton("Conectar");
 		btnConectar.setActionCommand("conectar");
-		btnConectar.setBounds(172, 63, 89, 23);
+		btnConectar.setBounds(175, 144, 89, 23);
 		getContentPane().add(btnConectar);
+		
+		lblNombre = new JLabel("Ingrese un nombre");
+		lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNombre.setAlignmentY(0.1f);
+		lblNombre.setAlignmentX(0.5f);
+		lblNombre.setBounds(0, 71, 434, 20);
+		getContentPane().add(lblNombre);
+		
+		txtNombre = new JTextField();
+		txtNombre.setColumns(10);
+		txtNombre.setBounds(128, 102, 178, 20);
+		getContentPane().add(txtNombre);
 	}
 
 
@@ -89,5 +104,10 @@ public class VistaConectarServidor extends JFrame implements InterfazConectarSer
 	@Override
 	public String getIpServidor() {
 		return this.txtIPServidor.getText();
+	}
+	
+	@Override
+	public String getNombre() {
+		return this.txtNombre.getText();
 	}
 }

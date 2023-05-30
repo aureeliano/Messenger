@@ -1,8 +1,10 @@
 package com.grupo.proyecto_AyD.red;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorServidor;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
+import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Sesion;
@@ -88,6 +90,7 @@ public class ListenerServidor {
                 if (!this.servidor.getUsuariosConectados().contains(mensaje.getRemitente())) {
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                  notificarConectados();
 
                   System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(),"[CONTROL]IP:" + servidor.getIp());
@@ -101,6 +104,8 @@ public class ListenerServidor {
                 quitarUsuario(remitente);
                 ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
+                notificarConectados();
+
                 System.out.println("[SERVIDOR] Usuario desconectado: " + mensaje.getRemitente());
               }
 
@@ -112,6 +117,8 @@ public class ListenerServidor {
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
+                  notificarConectados();
+
                   System.out.println("[SERVIDOR] Usuario escuchando: " + mensaje.getRemitente());
                 } else {
                   quitarUsuario(mensaje.getRemitente());
@@ -119,6 +126,8 @@ public class ListenerServidor {
                   mensaje.getRemitente().setEstado(EstadoUsuario.INACTIVO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+
+                  notificarConectados();
 
                   System.out.println("[SERVIDOR] Usuario inactivo: " + mensaje.getRemitente());
                 }
@@ -215,6 +224,7 @@ public class ListenerServidor {
 
 
     ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+    notificarConectados();
   }
 
   private void manejarRechazar(SolicitudLlamadaDTO solicitud) {
@@ -250,6 +260,24 @@ public class ListenerServidor {
       sesion.getMensajes().add(mensaje);
     }
 
+  }
+
+  /**
+   * Cada vez que alguien se conecta, le notificamos al resto de los usuarios conectados
+   */
+  private void notificarConectados() {
+    List<UsuarioDTO> conectados = servidor.getUsuariosConectados().stream().map(UsuarioDTO::fromUsuario).toList();
+
+    servidor
+            .getUsuariosConectados()
+            .forEach(u -> {
+                      try {
+                        conectorServidor.enviarMensaje(u, "[CONTROL][CONECTADOS]" + mapper.writeValueAsString(conectados));
+                      } catch (JsonProcessingException e) {
+                        System.out.println(e.getMessage());
+                      }
+                    }
+            );
   }
 
   private void manejarMensaje(String mensaje) {

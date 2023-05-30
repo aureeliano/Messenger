@@ -34,7 +34,7 @@ public class Usuario {
 
     public static Usuario getUsuario() {
         if (usuario == null) {
-            int puerto = ThreadLocalRandom.current().nextInt(3000, 4001);
+            int puerto = ThreadLocalRandom.current().nextInt(3003, 4001);
             usuario = new Usuario(UUID.randomUUID().toString(), puerto);
         }
         return usuario;

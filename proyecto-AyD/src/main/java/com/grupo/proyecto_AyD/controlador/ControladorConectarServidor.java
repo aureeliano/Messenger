@@ -14,6 +14,7 @@ public class ControladorConectarServidor implements ActionListener {
     private Conector conector;
     private Listener listener;
     private InterfazConectarServidor vistaConectarServidor;
+    private Usuario usuario;
 
 
     private ControladorConectarServidor() {
@@ -21,6 +22,7 @@ public class ControladorConectarServidor implements ActionListener {
         listener = Listener.getListener();
         listener.init("", Usuario.getUsuario().getPuerto(), false);
         conector.init("", 0, false);
+        usuario = Usuario.getUsuario();
 
         vistaConectarServidor = new VistaConectarServidor();
         vistaConectarServidor.setActionListener(this);
@@ -47,6 +49,7 @@ public class ControladorConectarServidor implements ActionListener {
 
         switch (comando) {
             case "conectar":
+                usuario.setNombre(vistaConectarServidor.getNombre());
                 try {
                     conector.enviarMensajeAServidor("[CONTROL][CONEXION_CLIENTE]", vistaConectarServidor.getIpServidor());
                 } catch (Exception exception) {
