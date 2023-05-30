@@ -3,6 +3,7 @@ package com.grupo.proyecto_AyD.controlador;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.red.Conector;
 import com.grupo.proyecto_AyD.red.ConectorServidor;
 import com.grupo.proyecto_AyD.red.ListenerServidor;
 import com.grupo.proyecto_AyD.vistas.InterfazServidor;
@@ -17,29 +18,26 @@ public class ControladorServidor implements ActionListener {
   private Servidor servidor;
   private InterfazServidor vistaServidor;
   private ListenerServidor listenerServidor;
+  private ConectorServidor conectorServidor;
 
-  private ControladorServidor() {
+  public ControladorServidor(int puerto) {
     vistaServidor = new VistaServidor();
     servidor = Servidor.getServidor();
     vistaServidor.setActionListener(this);
 
-    listenerServidor = ListenerServidor.getListenerServidor();
-    listenerServidor.init();
+    listenerServidor = new ListenerServidor(this);
+    conectorServidor = new ConectorServidor();
+    conectorServidor.init();
+
+    listenerServidor.init(puerto, conectorServidor);
+
+    vistaServidor.mostrar();
+    vistaServidor.setIpServidor(servidor.getIp());
   }
 
-  public static ControladorServidor getControlador() {
-    if (controladorServidor == null) {
-      controladorServidor = new ControladorServidor();
-    }
 
-    controladorServidor.vistaServidor.mostrar();
-    controladorServidor.vistaServidor.setIpServidor(controladorServidor.servidor.getIp());
-
-    return controladorServidor;
-  }
-
-  public static void actualizarConectados(List<Usuario> conectados) {
-    controladorServidor.vistaServidor.setUsuariosConectados(conectados.stream().map(UsuarioDTO::fromUsuario).toList());
+  public void actualizarConectados(List<Usuario> conectados) {
+    vistaServidor.setUsuariosConectados(conectados.stream().map(UsuarioDTO::fromUsuario).toList());
   }
 
   @Override
@@ -48,7 +46,10 @@ public class ControladorServidor implements ActionListener {
 
     switch (comando) {
       case "salir":
-        System.exit(0);
+        conectorServidor.terminar();
+        listenerServidor.terminar();
+        vistaServidor.esconder();
+
         break;
     }
   }

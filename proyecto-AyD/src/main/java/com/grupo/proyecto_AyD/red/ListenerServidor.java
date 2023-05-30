@@ -10,8 +10,10 @@ import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
+import lombok.Getter;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -34,29 +36,29 @@ public class ListenerServidor {
 
   private ConectorServidor conectorServidor;
 
-  private static ListenerServidor listenerServidor;
+  private ControladorServidor controladorServidor;
 
-  private ListenerServidor() {
+  @Getter
+  private int puertoEscucha;
+
+  public ListenerServidor(ControladorServidor controlador) {
     this.servidor = Servidor.getServidor();
     this.mapper = new ObjectMapper();
+    this.controladorServidor = controlador;
   }
 
-  public static ListenerServidor getListenerServidor() {
-    if (listenerServidor == null) {
-      listenerServidor = new ListenerServidor();
-    }
-    return listenerServidor;
-  }
 
-  public void init() {
+  public void init(int puerto, ConectorServidor conector) {
     try {
-      conectorServidor = ConectorServidor.getConector();
-      conectorServidor.init();
-      serverSocket = new ServerSocket(3000);
+      conectorServidor = conector;
+      conectorServidor.setListenerServidor(this);
+
+      serverSocket = new ServerSocket(puerto);
+      this.puertoEscucha = puerto;
       this.eschuchando = true;
       escuchar();
 
-      System.out.println("[SERVIDOR] Escuchando en puerto: 3000");
+      System.out.println("[SERVIDOR] Escuchando en puerto: " + puerto);
     } catch (Exception e) {
       System.out.println("Error al iniciar el listener: " + e.getMessage());
       throw new RuntimeException(e);
@@ -75,7 +77,7 @@ public class ListenerServidor {
           String mensajeCrudo = in.readLine();
           System.out.println("[SERVIDOR] Mensaje recibido: " + mensajeCrudo);
 
-          if (mensajeCrudo != null) {
+          if (mensajeCrudo != null && !mensajeCrudo.contains("[SYNC]")) {
             Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
             String contenido = mensaje.getMensaje();
 
@@ -89,7 +91,7 @@ public class ListenerServidor {
               if (contenido.contains("[CONEXION_CLIENTE]")){
                 if (!this.servidor.getUsuariosConectados().contains(mensaje.getRemitente())) {
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
-                  ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                  controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
                   notificarConectados();
 
                   System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
@@ -102,7 +104,7 @@ public class ListenerServidor {
               if (contenido.contains("[DESCONEXION_CLIENTE]")) {
                 Usuario remitente = mensaje.getRemitente();
                 quitarUsuario(remitente);
-                ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                 notificarConectados();
 
@@ -115,7 +117,7 @@ public class ListenerServidor {
 
                   mensaje.getRemitente().setEstado(EstadoUsuario.ESCUCHANDO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
-                  ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                  controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                   notificarConectados();
 
@@ -125,7 +127,7 @@ public class ListenerServidor {
 
                   mensaje.getRemitente().setEstado(EstadoUsuario.INACTIVO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
-                  ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                  controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                   notificarConectados();
 
@@ -140,7 +142,7 @@ public class ListenerServidor {
 
                 //Actualiza el nombre del usuario
                 this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
-                ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+                controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
                 procesarLlamada(solicitudLlamadaDTO);
               }
@@ -161,6 +163,8 @@ public class ListenerServidor {
                   manejarRechazar(solicitudLlamadaDTO);
                 }
               }
+            } else if (mensajeCrudo.contains("[SYNC]")) {
+              controladorServidor.actualizarConectados(Servidor.getServidor().getUsuariosConectados().stream().toList());
             } else {
               manejarMensaje(mensaje);
             }
@@ -223,7 +227,7 @@ public class ListenerServidor {
     servidor.getChatsActivos().add(sesion);
 
 
-    ControladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
+    controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
     notificarConectados();
   }
 
@@ -278,10 +282,20 @@ public class ListenerServidor {
                       }
                     }
             );
+    notificarServidorHermano();
   }
 
-  private void manejarMensaje(String mensaje) {
+  private void notificarServidorHermano() {
+    conectorServidor.sincronizar();
+  }
 
+  public void terminar() {
+    eschuchando = false;
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      System.out.println("Error al cerrar el socket: " + e.getMessage());
+    }
   }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +22,10 @@ public class ConectorServidor {
   private BufferedReader in;
   private ObjectMapper mapper;
   private Usuario usuario;
-  private static ConectorServidor conector;
+  private boolean beat;
+
+  @Setter
+  private ListenerServidor listenerServidor;
 
 
   public void init() {
@@ -29,6 +33,8 @@ public class ConectorServidor {
 
     try {
       usuario.setIp(InetAddress.getLocalHost().getHostAddress());
+      this.beat = true;
+      iniciarBeats();
       mapper = new ObjectMapper();
 
     } catch (IOException e) {
@@ -90,17 +96,58 @@ public class ConectorServidor {
     try {
       socket.close();
     } catch (IOException e) {
-      System.out.println("Error al cerrar el socket: " + e.getMessage());
     }
   }
 
 
+  private void iniciarBeats() {
+    new Thread(() -> {
+      while (beat) {
+        try {
+          Thread.sleep(2000);
+          enviarHeartbeat();
+        } catch (InterruptedException e) {
+          System.out.println("Error en el heartbeat: " + e.getMessage());
+        }
+      }
+    }).start();
+  }
 
-  public static ConectorServidor getConector() {
-    if (conector == null) {
-      conector = new ConectorServidor();
+  private void enviarHeartbeat() {
+    try {
+      socket = new Socket("localhost", 3000);
+      out = new PrintWriter(socket.getOutputStream(), true);
+
+      out.println("[HEARTBEAT]" + listenerServidor.getPuertoEscucha());
+
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      System.out.println("Error enviando heartbeat: " + e.getMessage());
     }
+  }
 
-    return conector;
+  public void sincronizar() {
+    try {
+      int target = 3001;
+      if (listenerServidor.getPuertoEscucha() == target) {
+        target = 3002;
+      }
+
+      socket = new Socket("localhost", target);
+      out = new PrintWriter(socket.getOutputStream(), true);
+
+      out.println("[SYNC]");
+
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      System.out.println("Error enviando heartbeat: " + e.getMessage());
+    }
+  }
+
+  public void terminar() {
+    this.beat = false;
+    manejarDesconexion();
   }
 }
