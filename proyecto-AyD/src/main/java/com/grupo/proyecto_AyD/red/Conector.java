@@ -55,38 +55,50 @@ public class Conector implements ChatInterface  {
 
     @Override
     public List<Mensaje> enviarMensaje(String contenido) {
+        int retry = 0;
+        int maxRetry = 50;
+        boolean exito = false;
 
-        try {
-            System.out.println("Intentando enviar mensaje: " + contenido);
-            socket = new Socket(targetIp, targetPuerto);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+        while (!exito && retry < maxRetry) {
+            try {
+                System.out.println("Intentando enviar mensaje: " + contenido);
+                socket = new Socket(targetIp, targetPuerto);
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream(), true);
 
-            if (!contenido.contains("[CONTROL]")) {
-                Mensaje mensaje = new Mensaje(null);
+                if (!contenido.contains("[CONTROL]")) {
+                    Mensaje mensaje = new Mensaje(null);
 
-                Mensaje mensajeEncriptado = new Mensaje(contenido);
-                mensaje.setContenidoEncriptado(encriptacion.encriptar(mapper.writeValueAsString(mensajeEncriptado), claveEncripcion));
+                    Mensaje mensajeEncriptado = new Mensaje(contenido);
+                    mensaje.setContenidoEncriptado(encriptacion.encriptar(mapper.writeValueAsString(mensajeEncriptado), claveEncripcion));
 
-                Sesion.getSesion().getMensajes().add(mensajeEncriptado);
+                    Sesion.getSesion().getMensajes().add(mensajeEncriptado);
 
-                out.println(mapper.writeValueAsString(mensaje));
-            } else {
-                Mensaje mensaje = new Mensaje(contenido);
+                    out.println(mapper.writeValueAsString(mensaje));
+                } else {
+                    Mensaje mensaje = new Mensaje(contenido);
 
-                out.println(mapper.writeValueAsString(mensaje));
+                    out.println(mapper.writeValueAsString(mensaje));
+                }
+
+                out.flush();
+                out.close();
+                System.out.println("Mensaje enviado: " + contenido);
+                exito = true;
+
+                return Sesion.getSesion().getMensajes()
+                        .stream()
+                        .sorted(Comparator.comparing(Mensaje::getFecha))
+                        .toList();
+            } catch (Exception e) {
+                System.out.println("Error enviando mensaje, reintentando: " + e.getMessage());
+                retry++;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
-
-            out.flush();
-            out.close();
-            System.out.println("Mensaje enviado: " + contenido);
-
-            return Sesion.getSesion().getMensajes()
-                    .stream()
-                    .sorted(Comparator.comparing(Mensaje::getFecha))
-                    .toList();
-        } catch (Exception e) {
-            System.out.println("Error enviando mensaje: " + e.getMessage());
         }
 
         return Sesion.getSesion().getMensajes()
