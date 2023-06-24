@@ -34,6 +34,12 @@ public class ControladorServidor implements ActionListener {
 
     vistaServidor.mostrar();
     vistaServidor.setIpServidor(servidor.getIp());
+    String puerto = servidor.getPuerto();
+    vistaServidor.setPuerto(servidor.getPuerto());
+
+    if (puerto.equals("3002")) {
+      vistaServidor.habilitarCambioAPrincipal(true);
+    }
   }
 
 
@@ -41,14 +47,24 @@ public class ControladorServidor implements ActionListener {
     vistaServidor.setUsuariosConectados(conectados.stream().map(UsuarioDTO::fromUsuario).toList());
   }
 
+  private void manejarCambioDePuerto() {
+    listenerServidor.moverAPrincipal();
+    if (servidor.getPuerto().equals("3001")) {
+      vistaServidor.mostrarMensaje("Servidor cambiado a puerto principal");
+      vistaServidor.habilitarCambioAPrincipal(false);
+    } else {
+      vistaServidor.mostrarMensaje("No se pudo cambiar el servidor a puerto principal, ya que se encuentra en uso");
+    }
+    vistaServidor.setPuerto(servidor.getPuerto());
+  }
+
   @Override
   public void actionPerformed(ActionEvent e) {
     String comando = e.getActionCommand();
 
     switch (comando) {
-      case "salir":
-        System.exit(0);
-        break;
+      case "salir" -> System.exit(0);
+      case "cambiarPuerto" -> manejarCambioDePuerto();
     }
   }
 }

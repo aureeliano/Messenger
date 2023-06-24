@@ -59,10 +59,14 @@ public class ListenerServidor {
         // Se intenta levantar el servidor en el puerto 3001
         serverSocket = new ServerSocket(3001);
         this.puertoEscucha = 3001;
-      } catch (Exception e) {
+        servidor.setPuerto("3001");
+        System.out.println("[SERVIDOR] Servidor principal");
+      } catch (IOException e) {
         //Si falla (porque ya hay un servidor levantado en ese puerto) se levanta en el 3002
         serverSocket = new ServerSocket(3002);
         this.puertoEscucha = 3002;
+        servidor.setPuerto("3002");
+        System.out.println("[SERVIDOR] Servidor redundante");
       }
 
       this.eschuchando = true;
@@ -76,7 +80,7 @@ public class ListenerServidor {
   }
 
   private void escuchar() {
-    Thread thread = new Thread(() -> {
+    Thread threadListener = new Thread(() -> {
       try {
         while (eschuchando) {
 
@@ -105,7 +109,7 @@ public class ListenerServidor {
 
                   System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(),"[CONTROL]IP:" + servidor.getIp());
-                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL]PUERTO:3000");
+                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL]PUERTO:3001");
                   this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL][CONEXION_CLIENTE][OK]");
                 }
               }
@@ -181,14 +185,44 @@ public class ListenerServidor {
           } else if (mensajeCrudo.contains("[SYNC]")) {
             manejarSync(mensajeCrudo);
           }
-
         }
       } catch (Exception e) {
         System.out.println("Error al escuchar: " + e.getMessage());
       }
     });
 
-    thread.start();
+    threadListener.start();
+
+    Thread threadSync = new Thread(() -> {
+      try {
+        while (eschuchando) {
+          try {
+            Thread.sleep(10000);
+          } catch (InterruptedException e) {
+            System.out.println("Error al dormir el thread: " + e.getMessage());
+          }
+          if (this.servidor.getPuerto().equals("3001")) {
+            conectorServidor.sincronizar();
+          }
+        }
+      } catch (Exception e) {
+        System.out.println("Error al sincronizar: " + e.getMessage());
+      }
+    });
+
+    threadSync.start();
+  }
+
+  public void moverAPrincipal() {
+    try {
+        serverSocket.close();
+    } catch (IOException e) {
+        System.out.println("Error al cerrar el socket, probablemente ya este cerrado: " + e.getMessage());
+    }
+    init(conectorServidor);
+    if (this.servidor.getPuerto().equals("3001")) {
+      System.out.println("[SERVIDOR] Servidor redundante movido a principal");
+    }
   }
 
 

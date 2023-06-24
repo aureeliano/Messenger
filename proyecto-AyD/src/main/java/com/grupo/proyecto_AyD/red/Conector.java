@@ -126,8 +126,8 @@ public class Conector implements ChatInterface  {
 
     public void enviarMensajeAServidor(String mensaje, String ip) {
         this.targetIp = ip;
-        this.targetPuerto = 3000;
-        this.puertoServidor = 3000;
+        this.targetPuerto = 3001;
+        this.puertoServidor = 3001;
         this.ipServidor = ip;
 
         enviarMensaje(mensaje);

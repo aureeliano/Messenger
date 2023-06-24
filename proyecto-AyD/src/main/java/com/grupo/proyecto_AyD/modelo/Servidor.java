@@ -16,6 +16,9 @@ public class Servidor {
   private String ip;
   @Getter
   @Setter
+  private String puerto;
+  @Getter
+  @Setter
   private Set<Usuario> usuariosConectados;
   @Getter
   @Setter

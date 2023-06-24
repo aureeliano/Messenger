@@ -126,7 +126,6 @@ public class ConectorServidor {
       out.flush();
       out.close();
     } catch (Exception e) {
-      System.out.println("Error enviando heartbeat: " + e.getMessage());
     }
   }
 
@@ -140,27 +139,25 @@ public class ConectorServidor {
       out.flush();
       out.close();
     } catch (Exception e) {
-      System.out.println("Error enviando heartbeat: " + e.getMessage());
     }
   }
 
   public void sincronizar() {
     try {
-      socket = new Socket("localhost", 3000);
+      socket = new Socket("localhost", 3002);
       out = new PrintWriter(socket.getOutputStream(), true);
 
       out.println("[SYNC][USUARIOS]" + mapper.writeValueAsString(Servidor.getServidor().getUsuariosConectados()));
       out.flush();
       out.close();
 
-      socket = new Socket("localhost", 3000);
+      socket = new Socket("localhost", 3002);
       out = new PrintWriter(socket.getOutputStream(), true);
       out.println("[SYNC][CHATS]" + mapper.writeValueAsString(Servidor.getServidor().getChatsActivos()));
       out.flush();
 
       out.close();
     } catch (Exception e) {
-      System.out.println("Error enviando heartbeat: " + e.getMessage());
     }
   }
 
