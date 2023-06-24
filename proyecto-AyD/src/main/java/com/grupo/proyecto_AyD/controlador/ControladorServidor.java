@@ -47,7 +47,7 @@ public class ControladorServidor implements ActionListener {
     vistaServidor.setUsuariosConectados(conectados.stream().map(UsuarioDTO::fromUsuario).toList());
   }
 
-  private void manejarCambioDePuerto() {
+  public void manejarCambioDePuerto() {
     listenerServidor.moverAPrincipal();
     if (servidor.getPuerto().equals("3001")) {
       vistaServidor.mostrarMensaje("Servidor cambiado a puerto principal");

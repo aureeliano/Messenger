@@ -90,7 +90,7 @@ public class ListenerServidor {
           String mensajeCrudo = in.readLine();
           System.out.println("[SERVIDOR] Mensaje recibido: " + mensajeCrudo);
 
-          if (mensajeCrudo != null && !mensajeCrudo.contains("[SYNC]")) {
+          if (mensajeCrudo != null && !mensajeCrudo.contains("[SYNC]") && !mensajeCrudo.contains("[SWITCH_PRINCIPAL]")) {
             Mensaje mensaje = mapper.readValue(mensajeCrudo, Mensaje.class);
             String contenido = mensaje.getMensaje();
 
@@ -178,12 +178,18 @@ public class ListenerServidor {
                 }
               }
 
+              if (contenido.contains("[SWITCH_PRINCIPAL]")) {
+                controladorServidor.manejarCambioDePuerto();
+              }
+
               conectorServidor.sincronizar();
             } else {
               manejarMensaje(mensaje);
             }
           } else if (mensajeCrudo.contains("[SYNC]")) {
             manejarSync(mensajeCrudo);
+          } else if (mensajeCrudo.contains("[SWITCH_PRINCIPAL]")) {
+            controladorServidor.manejarCambioDePuerto();
           }
         }
       } catch (Exception e) {

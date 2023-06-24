@@ -120,7 +120,6 @@ public class ConectorServidor {
     try {
       socket = new Socket("localhost", 3000);
       out = new PrintWriter(socket.getOutputStream(), true);
-
       out.println("[HEARTBEAT]" + listenerServidor.getPuertoEscucha());
 
       out.flush();
