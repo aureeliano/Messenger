@@ -145,21 +145,7 @@ public class Listener implements ChatInterface {
                             Mensaje mensajeDesencriptado = mapper.readValue(encriptador.desencriptar(mensajeEncriptado.getContenidoEncriptado(), claveDesencriptacion), Mensaje.class);
                             System.out.println("Mensaje desencriptado: " + mensajeDesencriptado);
 
-                            Sesion sesion = Sesion.getSesion();
-                            sesion.getMensajes().add(mensajeDesencriptado);
-                            if (controlador == null) {
-                                controlador = ControladorChat.getControlador();
-                            }
-
-                            controlador
-                                    .getVistaChat()
-                                    .setMensajes(
-                                            sesion
-                                                .getMensajes()
-                                                .stream()
-                                                .sorted(Comparator.comparing(Mensaje::getFecha))
-                                                .toList()
-                                    );
+                            gestorChats.mostrarNuevoMensaje(mensajeDesencriptado);
                         }
                     }
                 }

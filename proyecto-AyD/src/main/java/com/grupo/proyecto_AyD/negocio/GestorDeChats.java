@@ -9,9 +9,11 @@ import com.grupo.proyecto_AyD.controlador.ControladorMainMenu;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
+import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.red.Conector;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,5 +74,20 @@ public class GestorDeChats implements InterfazGestorChats {
 
     public void manejarMensajeDeEstado(String estado) {
         ControladorMainMenu.getControlador().setEstado(estado);
+    }
+
+    public void mostrarNuevoMensaje(Mensaje mensaje) {
+        Sesion sesion = Sesion.getSesion();
+        sesion.getMensajes().add(mensaje);
+
+        ControladorChat.getControlador()
+                .getVistaChat()
+                .setMensajes(
+                        sesion
+                                .getMensajes()
+                                .stream()
+                                .sorted(Comparator.comparing(Mensaje::getFecha))
+                                .toList()
+                );
     }
 }

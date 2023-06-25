@@ -9,4 +9,5 @@ public interface InterfazGestorChats {
     void enviarClaveDeEncriptacion(Mensaje mensaje);
     void manejarSolicitudLlamada(String solicutudCruda);
     void manejarMensajeDeEstado(String estado);
+    void mostrarNuevoMensaje(Mensaje mensaje);
 }
