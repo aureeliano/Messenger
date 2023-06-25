@@ -37,7 +37,7 @@ public class ListenerServidor {
   private final ObjectMapper mapper;
   private final Servidor servidor;
 
-  private ConectorServidor conectorServidor;
+  private InterfazConectorServidor conectorServidor;
 
   private ControladorServidor controladorServidor;
 
@@ -53,7 +53,7 @@ public class ListenerServidor {
   }
 
 
-  public void init(ConectorServidor conector) {
+  public void init(InterfazConectorServidor conector) {
     try {
       conectorServidor = conector;
       conectorServidor.setListenerServidor(this);

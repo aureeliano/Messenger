@@ -8,16 +8,17 @@ import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.red.ConectorServidor;
+import com.grupo.proyecto_AyD.red.InterfazConectorServidor;
 
 import java.util.List;
 
 public class GestorDeUsuarios implements InterfazGestorUsuarios {
-    private final ConectorServidor conectorServidor;
+    private final InterfazConectorServidor conectorServidor;
     private final Servidor servidor;
     private final ControladorServidor controladorServidor;
     private final ObjectMapper mapper;
 
-    public GestorDeUsuarios(ConectorServidor conectorServidor, ControladorServidor controladorServidor) {
+    public GestorDeUsuarios(InterfazConectorServidor conectorServidor, ControladorServidor controladorServidor) {
         this.conectorServidor = conectorServidor;
         this.servidor = Servidor.getServidor();
         this.controladorServidor = controladorServidor;

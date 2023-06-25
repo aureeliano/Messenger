@@ -16,7 +16,7 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
 
-public class ConectorServidor {
+public class ConectorServidor implements InterfazConectorServidor{
 
   private Socket socket;
   private PrintWriter out;

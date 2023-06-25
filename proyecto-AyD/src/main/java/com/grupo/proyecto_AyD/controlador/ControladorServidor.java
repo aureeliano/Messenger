@@ -5,6 +5,7 @@ import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.red.Conector;
 import com.grupo.proyecto_AyD.red.ConectorServidor;
+import com.grupo.proyecto_AyD.red.InterfazConectorServidor;
 import com.grupo.proyecto_AyD.red.ListenerServidor;
 import com.grupo.proyecto_AyD.vistas.InterfazServidor;
 import com.grupo.proyecto_AyD.vistas.VistaServidor;
@@ -17,7 +18,7 @@ public class ControladorServidor implements ActionListener {
   private Servidor servidor;
   private InterfazServidor vistaServidor;
   private ListenerServidor listenerServidor;
-  private ConectorServidor conectorServidor;
+  private InterfazConectorServidor conectorServidor;
 
   public ControladorServidor() {
     vistaServidor = new VistaServidor();
