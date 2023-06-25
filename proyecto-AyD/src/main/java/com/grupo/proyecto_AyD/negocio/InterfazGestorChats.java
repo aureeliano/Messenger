@@ -7,4 +7,6 @@ public interface InterfazGestorChats {
     void confirmarConexion();
     void actualizarListaConectados(String lista);
     void enviarClaveDeEncriptacion(Mensaje mensaje);
+    void manejarSolicitudLlamada(String solicutudCruda);
+    void manejarMensajeDeEstado(String estado);
 }

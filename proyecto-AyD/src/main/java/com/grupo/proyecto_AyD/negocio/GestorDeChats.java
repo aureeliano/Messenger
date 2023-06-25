@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.controlador.ControladorChat;
 import com.grupo.proyecto_AyD.controlador.ControladorConectarServidor;
+import com.grupo.proyecto_AyD.controlador.ControladorLlamada;
 import com.grupo.proyecto_AyD.controlador.ControladorMainMenu;
+import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.red.Conector;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 public class GestorDeChats implements InterfazGestorChats {
     private static GestorDeChats gestorDeChats = null;
+    private final List<SolicitudLlamadaDTO> solicitudes = new ArrayList<>();
     private final ObjectMapper mapper;
 
     public static GestorDeChats getGestor() {
@@ -54,5 +57,20 @@ public class GestorDeChats implements InterfazGestorChats {
 
         ControladorMainMenu.getControlador().esconder();
         ControladorChat.getControlador(mensaje.getRemitente().getIp(), true);
+    }
+
+    public void manejarSolicitudLlamada(String solicitudCruda) {
+        try {
+            SolicitudLlamadaDTO solicitud = mapper.readValue(solicitudCruda, SolicitudLlamadaDTO.class);
+            solicitudes.add(solicitud);
+
+            ControladorLlamada.getControladorLlamada().setDatosSolicitud(solicitud);
+        } catch (Exception e) {
+            System.out.println("[GESTOR DE CHATS] Error al manejar la solicitud de llamada");
+        }
+    }
+
+    public void manejarMensajeDeEstado(String estado) {
+        ControladorMainMenu.getControlador().setEstado(estado);
     }
 }

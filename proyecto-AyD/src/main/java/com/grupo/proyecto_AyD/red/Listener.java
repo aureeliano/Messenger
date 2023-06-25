@@ -113,10 +113,7 @@ public class Listener implements ChatInterface {
 
                             if (contenido.contains("[CONECTAR][SOLICITUD]")) {
                                 contenido = contenido.replace("[CONECTAR][SOLICITUD]", "");
-                                SolicitudLlamadaDTO solicitud = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
-                                solicitudes.add(solicitud);
-
-                                ControladorLlamada.getControladorLlamada().setDatosSolicitud(solicitud);
+                                gestorChats.manejarSolicitudLlamada(contenido);
                             }
 
                             if (contenido.contains("[CONECTAR][ACEPTAR]")) {
@@ -138,7 +135,7 @@ public class Listener implements ChatInterface {
 
                             if (contenido.contains("[CONECTAR][ERROR]")) {
                                 contenido = contenido.replace("[CONECTAR][ERROR]", "");
-                                ControladorMainMenu.getControlador().setEstado(contenido);
+                                gestorChats.manejarMensajeDeEstado(contenido);
                             }
 
                         } else {
