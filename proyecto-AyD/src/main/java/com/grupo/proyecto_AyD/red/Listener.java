@@ -10,6 +10,8 @@ import com.grupo.proyecto_AyD.encriptacion.Encriptador;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.negocio.GestorDeChats;
+import com.grupo.proyecto_AyD.negocio.InterfazGestorChats;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,12 +42,14 @@ public class Listener implements ChatInterface {
     private static Listener listener;
 
     private String claveDesencriptacion;
+    private InterfazGestorChats gestorChats;
 
     private final Encriptador encriptador = new Encriptacion();
 
 
     public void init(String ip, int puerto, boolean desdeChat) {
         this.usuario = Usuario.getUsuario();
+        this.gestorChats = GestorDeChats.getGestor();
 
         try {
             usuario.setIp(InetAddress.getLocalHost().getHostAddress());
@@ -91,7 +95,7 @@ public class Listener implements ChatInterface {
 
                             contenido = contenido.replace("[CONTROL]", "");
                             if (contenido.contains("[CONEXION_CLIENTE][OK]")) {
-                                ControladorConectarServidor.confirmarConexion();
+                                gestorChats.confirmarConexion();
                             }
 
                             if (contenido.contains("PUERTO:")) {
@@ -103,10 +107,8 @@ public class Listener implements ChatInterface {
                             }
 
                             if (contenido.contains("[FINALIZAR_CHAT]")) {
-                                assert controlador != null;
-
                                 pararEscucha();
-                                controlador.finalizarChat();
+                                gestorChats.cerrarChat();
                             }
 
                             if (contenido.contains("[CONECTAR][SOLICITUD]")) {
@@ -119,20 +121,12 @@ public class Listener implements ChatInterface {
 
                             if (contenido.contains("[CONECTAR][ACEPTAR]")) {
                                 contenido = contenido.replace("[CONECTAR][ACEPTAR]", "");
-                                Conector conector = Conector.getConector();
-                                conector.setClaveEncripcion(UUID.randomUUID().toString().replace("-","").substring(0, 8));
-                                conector.enviarMensaje("[CONTROL][CLAVE]" + conector.getClaveEncripcion());
-                                System.out.println("Clave encriptacion enviada: " + conector.getClaveEncripcion());
-
-                                ControladorMainMenu.getControlador().esconder();
-                                ControladorChat.getControlador(mensaje.getRemitente().getIp(), true);
+                                gestorChats.enviarClaveDeEncriptacion(mensaje);
                             }
 
                             if (contenido.contains("[CONECTADOS]")) {
                                 contenido = contenido.replace("[CONECTADOS]", "");
-                                List<UsuarioDTO> conectados = mapper.readValue(contenido, new TypeReference<List<UsuarioDTO>>(){});
-
-                                ControladorMainMenu.getControlador(false).setConectados(conectados);
+                                gestorChats.actualizarListaConectados(contenido);
                             }
 
                             if (contenido.contains("[CLAVE]")) {
