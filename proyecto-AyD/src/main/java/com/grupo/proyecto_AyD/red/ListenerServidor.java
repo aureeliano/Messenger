@@ -10,6 +10,8 @@ import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Servidor;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.negocio.GestorDeUsuarios;
+import com.grupo.proyecto_AyD.negocio.InterfazGestorUsuarios;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
 import lombok.Getter;
 
@@ -43,6 +45,8 @@ public class ListenerServidor {
   @Getter
   private int puertoEscucha;
 
+  private InterfazGestorUsuarios gestorUsuarios;
+
   public ListenerServidor(ControladorServidor controlador) {
     this.servidor = Servidor.getServidor();
     this.mapper = new ObjectMapper();
@@ -54,6 +58,8 @@ public class ListenerServidor {
     try {
       conectorServidor = conector;
       conectorServidor.setListenerServidor(this);
+
+      gestorUsuarios = new GestorDeUsuarios(conectorServidor, controladorServidor);
 
       try {
         // Se intenta levantar el servidor en el puerto 3001
@@ -102,48 +108,32 @@ public class ListenerServidor {
               contenido = contenido.replace("[CONTROL]", "");
 
               if (contenido.contains("[CONEXION_CLIENTE]")){
-                if (!this.servidor.getUsuariosConectados().contains(mensaje.getRemitente())) {
-                  this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
-                  controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
-                  notificarConectados();
-
-                  System.out.println("[SERVIDOR] Usuario conectado: " + mensaje.getRemitente());
-                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(),"[CONTROL]IP:" + servidor.getIp());
-                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL]PUERTO:3001");
-                  this.conectorServidor.enviarMensaje(mensaje.getRemitente(), "[CONTROL][CONEXION_CLIENTE][OK]");
-                }
+                gestorUsuarios.manejarConexion(mensaje);
               }
 
               if (contenido.contains("[DESCONEXION_CLIENTE]")) {
-                Usuario remitente = mensaje.getRemitente();
-                quitarUsuario(remitente);
-                controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
-                conectorServidor.sincronizar();
-
-                notificarConectados();
-
-                System.out.println("[SERVIDOR] Usuario desconectado: " + mensaje.getRemitente());
+                gestorUsuarios.manejarDesconexion(mensaje);
               }
 
               if (contenido.contains("[ESCUCHANDO]")) {
                 if (contenido.contains("[INICIAR]")) {
-                  quitarUsuario(mensaje.getRemitente());
+                  gestorUsuarios.quitarUsuario(mensaje.getRemitente());
 
                   mensaje.getRemitente().setEstado(EstadoUsuario.ESCUCHANDO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
-                  notificarConectados();
+                  gestorUsuarios.notificarConectados();
 
                   System.out.println("[SERVIDOR] Usuario escuchando: " + mensaje.getRemitente());
                 } else {
-                  quitarUsuario(mensaje.getRemitente());
+                  gestorUsuarios.quitarUsuario(mensaje.getRemitente());
 
                   mensaje.getRemitente().setEstado(EstadoUsuario.INACTIVO);
                   this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
                   controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
 
-                  notificarConectados();
+                  gestorUsuarios.notificarConectados();
 
                   System.out.println("[SERVIDOR] Usuario inactivo: " + mensaje.getRemitente());
                 }
@@ -152,7 +142,7 @@ public class ListenerServidor {
               if (contenido.contains("[CONECTAR]")) {
                 contenido = contenido.replace("[CONECTAR]", "");
                 SolicitudLlamadaDTO solicitudLlamadaDTO = mapper.readValue(contenido, SolicitudLlamadaDTO.class);
-                quitarUsuario(mensaje.getRemitente());
+                gestorUsuarios.quitarUsuario(mensaje.getRemitente());
 
                 //Actualiza el nombre del usuario
                 this.servidor.getUsuariosConectados().add(mensaje.getRemitente());
@@ -232,10 +222,6 @@ public class ListenerServidor {
   }
 
 
-  private void quitarUsuario(Usuario remitente) {
-    this.servidor.getUsuariosConectados().removeIf(u -> u.getIp().equals(remitente.getIp()) && u.getPuerto() == remitente.getPuerto());
-  }
-
   private void procesarLlamada(SolicitudLlamadaDTO solicitud) {
     Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
 
@@ -263,8 +249,8 @@ public class ListenerServidor {
     Usuario remitente = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getSolicitante().getIp()) && u.getPuerto() == solicitud.getSolicitante().getPuerto()).findFirst().orElse(null);
     Usuario destinatario = this.servidor.getUsuariosConectados().stream().filter(u -> u.getIp().equals(solicitud.getDestino().getIp()) && u.getPuerto() == solicitud.getDestino().getPuerto()).findFirst().orElse(null);
 
-    quitarUsuario(remitente);
-    quitarUsuario(destinatario);
+    gestorUsuarios.quitarUsuario(remitente);
+    gestorUsuarios.quitarUsuario(destinatario);
 
     conectorServidor.enviarMensaje(remitente, "[CONTROL][CONECTAR][ACEPTAR]");
 
@@ -280,7 +266,7 @@ public class ListenerServidor {
 
 
     controladorServidor.actualizarConectados(servidor.getUsuariosConectados().stream().toList());
-    notificarConectados();
+    gestorUsuarios.notificarConectados();
   }
 
   private void manejarRechazar(SolicitudLlamadaDTO solicitud) {
@@ -321,20 +307,6 @@ public class ListenerServidor {
   /**
    * Cada vez que alguien se conecta, le notificamos al resto de los usuarios conectados
    */
-  private void notificarConectados() {
-    List<UsuarioDTO> conectados = servidor.getUsuariosConectados().stream().map(UsuarioDTO::fromUsuario).toList();
-
-    servidor
-            .getUsuariosConectados()
-            .forEach(u -> {
-                      try {
-                        conectorServidor.enviarMensaje(u, "[CONTROL][CONECTADOS]" + mapper.writeValueAsString(conectados));
-                      } catch (JsonProcessingException e) {
-                        System.out.println(e.getMessage());
-                      }
-                    }
-            );
-  }
 
 
   private void manejarSync(String mensajeCrudo) {
