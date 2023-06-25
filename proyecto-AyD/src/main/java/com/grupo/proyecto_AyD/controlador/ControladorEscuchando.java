@@ -1,6 +1,7 @@
 package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.negocio.GestorDeChats;
 import com.grupo.proyecto_AyD.red.Conector;
 import com.grupo.proyecto_AyD.red.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazEscuchando;
@@ -14,12 +15,12 @@ public class ControladorEscuchando implements ActionListener {
     private static ControladorEscuchando controladorEscuchando = null;
     private InterfazEscuchando vistaEscuchando;
     private Usuario usuario;
-    private Conector conector;
+    private GestorDeChats gestorDeChats;
 
     private ControladorEscuchando() {
         vistaEscuchando = new VistaEscuchando();
         usuario = Usuario.getUsuario();
-        conector = Conector.getConector();
+        gestorDeChats = GestorDeChats.getGestor();
         vistaEscuchando.setActionListener(this);
     }
 
@@ -28,7 +29,7 @@ public class ControladorEscuchando implements ActionListener {
             controladorEscuchando = new ControladorEscuchando();
         }
 
-        controladorEscuchando.conector.enviarMensaje("[CONTROL][ESCUCHANDO][INICIAR]");
+        controladorEscuchando.gestorDeChats.enviarMensaje("[CONTROL][ESCUCHANDO][INICIAR]");
 
         controladorEscuchando.vistaEscuchando.setIpEscuchando(Usuario.getUsuario().getIp());
         controladorEscuchando.vistaEscuchando.setPuerto(Usuario.getUsuario().getPuerto());
@@ -54,7 +55,7 @@ public class ControladorEscuchando implements ActionListener {
 
         switch (comando) {
             case "volver":
-                conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
+                gestorDeChats.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
                 ControladorMainMenu.getControlador();
                 vistaEscuchando.esconder();
                 break;

@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Usuario;
+import com.grupo.proyecto_AyD.negocio.GestorDeChats;
 import com.grupo.proyecto_AyD.red.Conector;
 import com.grupo.proyecto_AyD.red.Listener;
 import com.grupo.proyecto_AyD.vistas.InterfazChat;
@@ -18,7 +19,7 @@ public class ControladorChat implements ActionListener {
     private InterfazChat vistaChat;
 
     private Usuario usuario;
-    private Conector conector;
+    private final GestorDeChats gestorDeChats;
 
     @Getter
     private boolean visible;
@@ -27,7 +28,7 @@ public class ControladorChat implements ActionListener {
         vistaChat = new VistaChat();
         vistaChat.setActionListener(this);
         usuario = Usuario.getUsuario();
-        conector = Conector.getConector();
+        gestorDeChats = GestorDeChats.getGestor();
     }
 
     public static ControladorChat getControlador(String ip, boolean mostrar) {
@@ -50,7 +51,7 @@ public class ControladorChat implements ActionListener {
     }
 
     public void finalizarChat() {
-        conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
+        gestorDeChats.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
         vistaChat.mostrarMensaje("El compañero ha finalizado la conversación");
         vistaChat.esconder();
         ControladorMainMenu.getControlador();
@@ -67,11 +68,11 @@ public class ControladorChat implements ActionListener {
                 if (mensaje.equals("")) {
                     break;
                 }
-                List<Mensaje> mensajes = conector.enviarMensaje(mensaje);
+                List<Mensaje> mensajes = gestorDeChats.enviarMensaje(mensaje);
                 vistaChat.setMensajes(mensajes);
             }
             case "salir" -> {
-                conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
+                gestorDeChats.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
                 ControladorMainMenu.getControlador();
                 visible = false;
                 vistaChat.esconder();

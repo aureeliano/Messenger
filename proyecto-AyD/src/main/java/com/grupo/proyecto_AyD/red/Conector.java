@@ -20,7 +20,7 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
 
-public class Conector implements ChatInterface  {
+public class Conector implements ChatInterface, InterfazConectorCliente, InterfazConectorChat {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;

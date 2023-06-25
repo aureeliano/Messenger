@@ -11,6 +11,7 @@ import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.red.Conector;
+import com.grupo.proyecto_AyD.red.InterfazConectorChat;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -52,7 +53,7 @@ public class GestorDeChats implements InterfazGestorChats {
     }
 
     public void enviarClaveDeEncriptacion(Mensaje mensaje) {
-        Conector conector = Conector.getConector();
+        InterfazConectorChat conector = Conector.getConector();
         conector.setClaveEncripcion(UUID.randomUUID().toString().replace("-","").substring(0, 8));
         conector.enviarMensaje("[CONTROL][CLAVE]" + conector.getClaveEncripcion());
         System.out.println("Clave encriptacion enviada: " + conector.getClaveEncripcion());
@@ -89,5 +90,10 @@ public class GestorDeChats implements InterfazGestorChats {
                                 .sorted(Comparator.comparing(Mensaje::getFecha))
                                 .toList()
                 );
+    }
+
+    public List<Mensaje> enviarMensaje(String mensaje) {
+        InterfazConectorChat conector = Conector.getConector();
+        return conector.enviarMensaje(mensaje);
     }
 }
