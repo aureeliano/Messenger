@@ -6,6 +6,7 @@ import com.grupo.proyecto_AyD.controlador.*;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.encriptacion.Encriptacion;
+import com.grupo.proyecto_AyD.encriptacion.Encriptador;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -40,7 +41,7 @@ public class Listener implements ChatInterface {
 
     private String claveDesencriptacion;
 
-    private Encriptacion encriptacion = new Encriptacion();
+    private final Encriptador encriptador = new Encriptacion();
 
 
     public void init(String ip, int puerto, boolean desdeChat) {
@@ -150,7 +151,7 @@ public class Listener implements ChatInterface {
                             Mensaje mensajeEncriptado = mapper.readValue(mensajeCrudo, Mensaje.class);
                             System.out.println("Mensaje encriptado recibido: " + mensajeEncriptado.getContenidoEncriptado());
 
-                            Mensaje mensajeDesencriptado = mapper.readValue(encriptacion.desencriptar(mensajeEncriptado.getContenidoEncriptado(), claveDesencriptacion), Mensaje.class);
+                            Mensaje mensajeDesencriptado = mapper.readValue(encriptador.desencriptar(mensajeEncriptado.getContenidoEncriptado(), claveDesencriptacion), Mensaje.class);
                             System.out.println("Mensaje desencriptado: " + mensajeDesencriptado);
 
                             Sesion sesion = Sesion.getSesion();

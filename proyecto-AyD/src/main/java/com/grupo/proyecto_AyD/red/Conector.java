@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo.proyecto_AyD.dtos.ExtremoDTO;
 import com.grupo.proyecto_AyD.dtos.SolicitudLlamadaDTO;
 import com.grupo.proyecto_AyD.encriptacion.Encriptacion;
+import com.grupo.proyecto_AyD.encriptacion.Encriptador;
 import com.grupo.proyecto_AyD.modelo.Mensaje;
 import com.grupo.proyecto_AyD.modelo.Sesion;
 import com.grupo.proyecto_AyD.modelo.Usuario;
@@ -36,7 +37,7 @@ public class Conector implements ChatInterface  {
     @Setter
     private String claveEncripcion;
 
-    private Encriptacion encriptacion = new Encriptacion();
+    private final Encriptador encriptador = new Encriptacion();
 
 
     public void init(String ip, int puerto, boolean desdeChat) {
@@ -70,7 +71,7 @@ public class Conector implements ChatInterface  {
                     Mensaje mensaje = new Mensaje(null);
 
                     Mensaje mensajeEncriptado = new Mensaje(contenido);
-                    mensaje.setContenidoEncriptado(encriptacion.encriptar(mapper.writeValueAsString(mensajeEncriptado), claveEncripcion));
+                    mensaje.setContenidoEncriptado(encriptador.encriptar(mapper.writeValueAsString(mensajeEncriptado), claveEncripcion));
 
                     Sesion.getSesion().getMensajes().add(mensajeEncriptado);
 

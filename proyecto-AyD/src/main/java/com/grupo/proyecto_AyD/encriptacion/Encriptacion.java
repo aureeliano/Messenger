@@ -1,5 +1,6 @@
 package com.grupo.proyecto_AyD.encriptacion;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Base64;
@@ -9,7 +10,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 
-public class Encriptacion {
+public class Encriptacion implements Encriptador {
 	public SecretKeySpec crearClave(String key) { //Crear clave de encriptacion/desencriptacion
 		try {
 			byte[] cadena = key.getBytes("UTF-8");
@@ -28,11 +29,10 @@ public class Encriptacion {
 			SecretKeySpec secretKeySpec = crearClave(key);
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE,secretKeySpec);
-			byte[] cadena = encriptar.getBytes("UTF-8");
+			byte[] cadena = encriptar.getBytes(StandardCharsets.UTF_8);
 			byte[] encriptada = cipher.doFinal(cadena);
-			String cadena_encriptada = Base64.getEncoder().encodeToString(encriptada);
-			
-			return cadena_encriptada;
+
+			return Base64.getEncoder().encodeToString(encriptada);
 			
 		}
 		catch(Exception e) {
@@ -47,11 +47,9 @@ public class Encriptacion {
 			cipher.init(Cipher.DECRYPT_MODE,secretKeySpec);
 			
 			byte[] cadena = Base64.getDecoder().decode(desencriptar);
-			byte[] desencriptada =cipher.doFinal(cadena);
-			
-			String cadena_encriptada = new String(desencriptada);
-			
-			return cadena_encriptada;
+			byte[] desencriptada = cipher.doFinal(cadena);
+
+			return new String(desencriptada);
 		}
 		catch(Exception e) {
 			return ""; 
