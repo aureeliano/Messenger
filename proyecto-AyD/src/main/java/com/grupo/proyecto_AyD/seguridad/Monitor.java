@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Monitor {
+public class Monitor implements InterfazMonitor {
 
   private static Monitor monitor = null;
 
@@ -104,7 +104,7 @@ public class Monitor {
   };
 
   // El monitor le indica al server redundante que use el puerto principal
-  private void enviarMensajeDeCambio() {
+  public void enviarMensajeDeCambio() {
     EjecutorBackoff.ejecutarConBackoffExponencial(() -> {
       Socket socketServidor = new Socket("localhost", 3002);
       PrintWriter out = new PrintWriter(socketServidor.getOutputStream(), true);
