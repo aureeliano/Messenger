@@ -2,6 +2,7 @@ package com.grupo.proyecto_AyD.controlador;
 
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.red.Conector;
+import com.grupo.proyecto_AyD.red.InterfazConectorCliente;
 import com.grupo.proyecto_AyD.vistas.InterfazConectar;
 import com.grupo.proyecto_AyD.vistas.VistaConectar;
 import lombok.Getter;
@@ -14,7 +15,7 @@ public class ControladorConectar implements ActionListener {
     private static ControladorConectar controladorConectar = null;
     @Getter
     @Setter
-    private Conector conector;
+    private InterfazConectorCliente conector;
     private InterfazConectar vistaConectar;
     private Usuario usuario;
 

@@ -3,9 +3,9 @@ package com.grupo.proyecto_AyD.controlador;
 import com.grupo.proyecto_AyD.dtos.UsuarioDTO;
 import com.grupo.proyecto_AyD.modelo.Usuario;
 import com.grupo.proyecto_AyD.red.Conector;
-import com.grupo.proyecto_AyD.red.ConectorServidor;
+import com.grupo.proyecto_AyD.red.InterfazConectorChat;
+import com.grupo.proyecto_AyD.red.InterfazConectorCliente;
 import com.grupo.proyecto_AyD.tipos.EstadoUsuario;
-import com.grupo.proyecto_AyD.vistas.InterfazBase;
 import com.grupo.proyecto_AyD.vistas.InterfazMenu;
 import com.grupo.proyecto_AyD.vistas.MainMenu;
 
@@ -18,13 +18,15 @@ public class ControladorMainMenu implements ActionListener {
     private static ControladorMainMenu controladorMainMenu = null;
     private InterfazMenu vistaMenu;
     private Usuario usuario;
-    private Conector conector;
+    private InterfazConectorCliente conectorCliente;
+    private InterfazConectorChat conectorChat;
 
 
     private ControladorMainMenu() {
         vistaMenu = new MainMenu();
         vistaMenu.setActionListener(this);
-        conector = Conector.getConector();
+        conectorCliente = Conector.getConector();
+        conectorChat = Conector.getConector();
         usuario = Usuario.getUsuario();
 
         vistaMenu.setIp(usuario.getIp());
@@ -86,13 +88,13 @@ public class ControladorMainMenu implements ActionListener {
         if (usuario.getEstado().equals(EstadoUsuario.INACTIVO)) {
             usuario.setEstado(EstadoUsuario.ESCUCHANDO);
 
-            conector.enviarMensaje("[CONTROL][ESCUCHANDO][INICIAR]");
+            conectorChat.enviarMensaje("[CONTROL][ESCUCHANDO][INICIAR]");
             vistaMenu.setEstado("Escuchando");
             vistaMenu.cambiarBotonEscucha(true);
         } else {
             usuario.setEstado(EstadoUsuario.INACTIVO);
 
-            conector.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
+            conectorChat.enviarMensaje("[CONTROL][ESCUCHANDO][TERMINAR]");
             vistaMenu.setEstado("Escucha terminada, inactivo");
             vistaMenu.cambiarBotonEscucha(false);
         }
@@ -107,7 +109,7 @@ public class ControladorMainMenu implements ActionListener {
                 return;
             }
             if (usuarioDTO.getEstado().equals(EstadoUsuario.ESCUCHANDO)) {
-                conector.iniciarChat(usuarioDTO.getIp(), usuarioDTO.getPuerto());
+                conectorCliente.iniciarChat(usuarioDTO.getIp(), usuarioDTO.getPuerto());
                 vistaMenu.setEstado("Intentando conectar...");
             } else {
                 vistaMenu.mostrarMensaje("El usuario seleccionado no está escuchando");
